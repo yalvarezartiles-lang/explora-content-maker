@@ -35,6 +35,8 @@ export const defaultTexts = {
   "hero.cta1": "Matricúlate ahora",
   "hero.cta2": "Ver cursos intensivos",
   "hero.note": "Lunes a viernes · 10:00–13:00 y 15:00–20:00",
+  "hero.note2": "Lunes a viernes · 10:00–13:00 y 15:00–20:00",
+
 
   "trust.1.value": "5,0★",
   "trust.1.label": "Valoración media en Google",

@@ -88,6 +88,11 @@ export function Hero() {
             <Clock className="size-4 text-primary" />
             <T k="hero.note" />
           </p>
+          <p className="mt-2 flex items-center gap-2 text-sm text-muted-foreground">
+            <Clock className="size-4 text-primary" />
+            <T k="hero.note2" />
+          </p>
+
         </div>
         <div className="reveal relative">
           <img
