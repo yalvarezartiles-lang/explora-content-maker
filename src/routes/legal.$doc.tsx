@@ -52,7 +52,6 @@ export const Route = createFileRoute("/legal/$doc")({
 function LegalPage() {
   const { doc } = Route.useLoaderData();
   const base = `legal.${DOCS[doc].key}`;
-  const body = defaultTexts[`${base}.body` as keyof typeof defaultTexts];
 
   return (
     <>
@@ -65,12 +64,13 @@ function LegalPage() {
           <ArrowLeft className="size-4" /> Volver al inicio
         </Link>
         <T k={`${base}.title`} as="h1" className="mt-6 text-4xl font-black md:text-5xl" />
-        <div className="mt-8 max-w-3xl space-y-5 text-sm leading-relaxed text-muted-foreground">
-          {body.split("\n\n").map((p, i) => (
-            <T key={i} k={`${base}.body.p${i}`} as="p" />
-          ))}
-        </div>
+        <T
+          k={`${base}.body`}
+          as="div"
+          className="mt-8 max-w-3xl text-sm leading-relaxed whitespace-pre-line text-muted-foreground"
+        />
       </main>
+
       <Footer />
       <WhatsAppFab />
       <CookieBanner />
