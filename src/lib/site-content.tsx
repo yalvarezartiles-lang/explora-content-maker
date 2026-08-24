@@ -37,6 +37,13 @@ export const defaultTexts = {
   "hero.note": "Lunes a viernes · 10:00–13:00 y 15:00–20:00",
   "hero.note2": "Lunes a viernes · 10:00–13:00 y 15:00–20:00",
 
+  "hero.slide.1.title": "Clases prácticas a tu ritmo",
+  "hero.slide.1.text": "Profesores cercanos y coches revisados al día.",
+  "hero.slide.2.title": "Nuestra flota",
+  "hero.slide.2.text": "Vehículos modernos, cómodos y siempre a punto.",
+  "hero.slide.3.title": "Oferta: matrícula + teórica",
+  "hero.slide.3.text": "Consulta las promociones vigentes de este mes.",
+
 
   "trust.1.value": "5,0★",
   "trust.1.label": "Valoración media en Google",

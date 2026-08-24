@@ -2,23 +2,17 @@ import { useEffect, useState } from "react";
 import { Link } from "@tanstack/react-router";
 import { Menu, X, Phone } from "lucide-react";
 import { T, useSite, useText } from "@/lib/site-content";
+import logoAsset from "@/assets/logo-adassa.png.asset.json";
 
-function Traffic() {
+function Brandmark() {
   return (
-    <span className="flex h-9 w-4 flex-col items-center justify-center gap-[3px] rounded-full bg-graphite px-[3px]">
-      <span
-        className="h-2 w-2 rounded-full bg-destructive"
-        style={{ animation: "light-red 4.5s infinite" }}
-      />
-      <span
-        className="h-2 w-2 rounded-full bg-amber"
-        style={{ animation: "light-amber 4.5s infinite" }}
-      />
-      <span
-        className="h-2 w-2 rounded-full bg-primary"
-        style={{ animation: "light-green 4.5s infinite" }}
-      />
-    </span>
+    <img
+      src={logoAsset.url}
+      alt="Logo Autoescuela Adassa"
+      width={44}
+      height={44}
+      className="size-11 object-contain"
+    />
   );
 }
 
