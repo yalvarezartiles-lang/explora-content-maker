@@ -95,14 +95,8 @@ export function Hero() {
 
         </div>
         <div className="reveal relative">
-          <img
-            src={heroImg}
-            alt="Alumna de Autoescuela Adassa al volante durante una clase práctica"
-            width={1408}
-            height={1104}
-            className="aspect-[4/3.2] w-full rounded-3xl object-cover shadow-lift"
-          />
-          <div className="absolute -bottom-5 -left-2 flex items-center gap-3 rounded-2xl bg-card px-4 py-3 shadow-lift md:left-6">
+          <HeroCarousel />
+          <div className="absolute -bottom-5 -left-2 z-10 flex items-center gap-3 rounded-2xl bg-card px-4 py-3 shadow-lift md:left-6">
             <span className="flex size-10 items-center justify-center rounded-full bg-primary-soft">
               <ShieldCheck className="size-5 text-primary-dark" />
             </span>
