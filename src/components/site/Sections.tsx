@@ -1,4 +1,4 @@
-import { useState, type ReactNode } from "react";
+import { useEffect, useState, type ReactNode } from "react";
 import {
   BookOpen,
   Car,
@@ -20,6 +20,69 @@ import { Link } from "@tanstack/react-router";
 import { toast } from "sonner";
 import { T, useSite, useText } from "@/lib/site-content";
 import heroImg from "@/assets/hero-adassa.jpg";
+import slideCoche from "@/assets/slide-coche.jpg";
+import slideOferta from "@/assets/slide-oferta.jpg";
+
+const heroSlides = [
+  { img: heroImg, alt: "Alumna de Autoescuela Adassa al volante durante una clase práctica", k: 1 },
+  { img: slideCoche, alt: "Coche de la flota de Autoescuela Adassa", k: 2 },
+  { img: slideOferta, alt: "Alumnos celebrando el aprobado del examen de conducir", k: 3 },
+];
+
+function HeroCarousel() {
+  const [i, setI] = useState(0);
+
+  useEffect(() => {
+    const id = setInterval(() => setI((v) => (v + 1) % heroSlides.length), 5000);
+    return () => clearInterval(id);
+  }, []);
+
+  return (
+    <div className="relative aspect-[4/3.2] w-full overflow-hidden rounded-3xl shadow-lift">
+      {heroSlides.map((s, idx) => (
+        <div
+          key={s.k}
+          className={`absolute inset-0 transition-opacity duration-700 ${
+            idx === i ? "opacity-100" : "opacity-0"
+          }`}
+        >
+          <img
+            src={s.img}
+            alt={s.alt}
+            width={1408}
+            height={1104}
+            loading={idx === 0 ? "eager" : "lazy"}
+            className="size-full object-cover"
+          />
+          <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-graphite/85 to-transparent p-5 pb-10 text-left">
+            <T
+              k={`hero.slide.${s.k}.title`}
+              as="p"
+              className="font-display text-lg font-bold text-primary-foreground"
+            />
+            <T
+              k={`hero.slide.${s.k}.text`}
+              as="p"
+              className="mt-1 text-sm text-primary-foreground/80"
+            />
+          </div>
+        </div>
+      ))}
+      <div className="absolute top-4 right-4 z-10 flex gap-1.5">
+        {heroSlides.map((s, idx) => (
+          <button
+            key={s.k}
+            aria-label={`Ver imagen ${idx + 1}`}
+            onClick={() => setI(idx)}
+            className={`h-2 rounded-full transition-all duration-300 ${
+              idx === i ? "w-6 bg-primary" : "w-2 bg-card/70"
+            }`}
+          />
+        ))}
+      </div>
+    </div>
+  );
+}
 
 function Section({
   id,
@@ -95,14 +158,8 @@ export function Hero() {
 
         </div>
         <div className="reveal relative">
-          <img
-            src={heroImg}
-            alt="Alumna de Autoescuela Adassa al volante durante una clase práctica"
-            width={1408}
-            height={1104}
-            className="aspect-[4/3.2] w-full rounded-3xl object-cover shadow-lift"
-          />
-          <div className="absolute -bottom-5 -left-2 flex items-center gap-3 rounded-2xl bg-card px-4 py-3 shadow-lift md:left-6">
+          <HeroCarousel />
+          <div className="absolute -bottom-5 -left-2 z-10 flex items-center gap-3 rounded-2xl bg-card px-4 py-3 shadow-lift md:left-6">
             <span className="flex size-10 items-center justify-center rounded-full bg-primary-soft">
               <ShieldCheck className="size-5 text-primary-dark" />
             </span>
