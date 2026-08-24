@@ -327,7 +327,7 @@ export function Locations() {
               className="h-56 w-full border-0"
               loading="lazy"
               referrerPolicy="no-referrer-when-downgrade"
-              src={`https://www.google.com/maps?q=${encodeURIComponent(addrs[i - 1])}&output=embed`}
+              src={`https://www.google.com/maps?q=${encodeURIComponent(addrs[i - 1] ?? "")}&output=embed`}
             />
             <div className="p-6">
               <T k={`locations.${i}.name`} as="h3" className="text-xl font-bold" />
@@ -340,7 +340,7 @@ export function Locations() {
                 <T k={`locations.${i}.hours`} />
               </p>
               <a
-                href={`https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(addrs[i - 1])}`}
+                href={`https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(addrs[i - 1] ?? "")}`}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="mt-5 inline-block rounded-full bg-primary px-5 py-2.5 text-sm font-bold text-primary-foreground transition-all duration-250 hover:scale-[1.02] hover:bg-primary-dark"
