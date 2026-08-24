@@ -48,7 +48,7 @@ export function Header() {
     >
       <div className="container-page flex h-18 items-center justify-between gap-4 py-3">
         <Link to="/" className="flex items-center gap-2.5">
-          <Traffic />
+          <Brandmark />
           <span className="flex flex-col leading-tight">
             <T k="brand.name" className="font-display text-base font-bold" />
             <T k="brand.tagline" className="text-[11px] text-muted-foreground" />
