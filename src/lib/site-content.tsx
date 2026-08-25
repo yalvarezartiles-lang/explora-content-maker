@@ -91,11 +91,11 @@ export const defaultTexts = {
   "dgt.1.title": "Consulta tu nota",
   "dgt.1.text": "Accede a la Sede Electrónica de la DGT y mira el resultado de tu examen.",
   "dgt.1.cta": "Ir a la Sede Electrónica",
-  "dgt.1.url": "https://sede.dgt.gob.es/es/permisos-de-conducir/consulta-notas-examen/",
+  "dgt.1.url": "https://sede.dgt.gob.es/es/servicios-sede/Consulta-notas/index.html#",
   "dgt.2.title": "Practica el test teórico",
   "dgt.2.text": "Tests oficiales de la DGT para entrenar antes del examen teórico.",
   "dgt.2.cta": "Hacer tests oficiales",
-  "dgt.2.url": "https://www.dgt.es/permisos-de-conducir/pruebas-y-examenes/",
+  "dgt.2.url": "https://cloud.aeolservice.es/",
 
   "videos.kicker": "Novedad",
   "videos.title": "Vídeos de los recorridos de examen",
