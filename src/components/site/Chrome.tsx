@@ -1,13 +1,13 @@
 import { useEffect, useState } from "react";
 import { Link } from "@tanstack/react-router";
-import { MessageCircle, Pencil, RotateCcw, Eye, Copy, Check } from "lucide-react";
+import { MessageCircle } from "lucide-react";
 import { T, useSite, useText } from "@/lib/site-content";
 
 export function WhatsAppFab() {
   const number = useText("info.whatsapp").replace(/\D/g, "");
   const message = useText("whatsapp.message");
   return (
-    <a
+    
       href={`https://wa.me/34${number}?text=${encodeURIComponent(message)}`}
       target="_blank"
       rel="noopener noreferrer"
@@ -152,68 +152,5 @@ export function Footer() {
         <T k="footer.rights" as="p" className="container-page text-xs opacity-55" />
       </div>
     </footer>
-  );
-}
-
-/** Panel de edición: activa el modo edición de textos y muestra/oculta secciones. */
-export function EditorBar() {
-  const { editing, setEditing, settings, setSetting, reset, exportJson } = useSite();
-  const [copied, setCopied] = useState(false);
-
-  if (!editing) {
-    return (
-      <button
-        onClick={() => setEditing(true)}
-        aria-label="Editar textos"
-        className="fixed bottom-5 left-5 z-50 flex items-center gap-2 rounded-full border border-border bg-card px-3.5 py-2.5 text-xs font-bold shadow-soft transition-transform hover:scale-[1.03]"
-      >
-        <Pencil className="size-4 text-primary" />
-        Editar textos
-      </button>
-    );
-  }
-
-  return (
-    <div className="fixed bottom-5 left-5 z-60 w-[min(20rem,calc(100vw-2.5rem))] rounded-2xl border border-border bg-card p-4 shadow-lift">
-      <p className="font-display text-sm font-bold">Modo edición</p>
-      <p className="mt-1 text-xs text-muted-foreground">
-        Haz clic sobre cualquier texto de la web y escribe. Se guarda solo en este navegador.
-      </p>
-
-      <label className="mt-4 flex items-center justify-between gap-3 rounded-lg bg-muted px-3 py-2.5 text-xs font-semibold">
-        Sección de vídeos de examen
-        <input
-          type="checkbox"
-          checked={settings.showVideos}
-          onChange={(e) => setSetting("showVideos", e.target.checked)}
-          className="size-4 accent-[oklch(0.63_0.17_152)]"
-        />
-      </label>
-
-      <div className="mt-3 flex flex-wrap gap-2">
-        <button
-          onClick={() => setEditing(false)}
-          className="inline-flex items-center gap-1.5 rounded-full bg-primary px-3 py-2 text-xs font-bold text-primary-foreground"
-        >
-          <Eye className="size-3.5" /> Vista previa
-        </button>
-        <button
-          onClick={() => {
-            navigator.clipboard?.writeText(exportJson());
-            setCopied(true);
-            setTimeout(() => setCopied(false), 1600);
-          }}
-          className="inline-flex items-center gap-1.5 rounded-full border border-border px-3 py-2 text-xs font-bold hover:bg-muted"
-        >
-          {copied ? <Check className="size-3.5" /> : <Copy className="size-3.5" />} Copiar JSON
-        </button>
-        <button
-          onClick={reset}
-          className="inline-flex items-center gap-1.5 rounded-full border border-border px-3 py-2 text-xs font-bold hover:bg-muted"
-        >
-          <RotateCcw className="size-3.5" /> Restaurar
-        </button>
-      </div>
-    </div>
   );
 }
