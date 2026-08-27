@@ -1,7 +1,7 @@
 import { createFileRoute, Link, notFound } from "@tanstack/react-router";
 import { ArrowLeft } from "lucide-react";
 import { Header } from "@/components/site/Header";
-import { Footer, WhatsAppFab, CookieBanner, EditorBar } from "@/components/site/Chrome";
+import { Footer, WhatsAppFab, CookieBanner } from "@/components/site/Chrome";
 import { T } from "@/lib/site-content";
 
 const DOCS = {
@@ -74,7 +74,6 @@ function LegalPage() {
       <Footer />
       <WhatsAppFab />
       <CookieBanner />
-      <EditorBar />
     </>
   );
 }
