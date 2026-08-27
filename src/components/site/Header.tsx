@@ -2,12 +2,11 @@ import { useEffect, useState } from "react";
 import { Link } from "@tanstack/react-router";
 import { Menu, X, Phone } from "lucide-react";
 import { T, useSite, useText } from "@/lib/site-content";
-import logoAsset from "@/assets/logo-adassa.png.asset.json";
 
 function Brandmark() {
   return (
     <img
-      src={logoAsset.url}
+      src="/logo-adassa.png"
       alt="Logo Autoescuela Adassa"
       width={44}
       height={44}
