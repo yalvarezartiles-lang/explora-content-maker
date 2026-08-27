@@ -1,6 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { Header } from "@/components/site/Header";
-import { Footer, WhatsAppFab, CookieBanner, EditorBar } from "@/components/site/Chrome";
+import { Footer, WhatsAppFab, CookieBanner } from "@/components/site/Chrome";
 import {
   Hero,
   TrustBar,
@@ -49,7 +49,6 @@ function Index() {
       <Footer />
       <WhatsAppFab />
       <CookieBanner />
-      <EditorBar />
     </>
   );
 }
