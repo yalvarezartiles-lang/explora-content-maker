@@ -6,8 +6,8 @@ import { T, useSite, useText } from "@/lib/site-content";
 export function WhatsAppFab() {
   const number = useText("info.whatsapp").replace(/\D/g, "");
   const message = useText("whatsapp.message");
-  return (
-    
+   return (
+    <a
       href={"https://wa.me/34" + number + "?text=" + encodeURIComponent(message)}
       target="_blank"
       rel="noopener noreferrer"
