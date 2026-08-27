@@ -27,10 +27,11 @@ export function CookieBanner() {
     setChoice(localStorage.getItem("adassa-cookies"));
   }, []);
 
-  const decide = (v: string) => {
-    localStorage.setItem("adassa-cookies", v);
-    setChoice(v);
-  };
+const decide = (v: string) => {
+  localStorage.setItem("adassa-cookies", v);
+  window.dispatchEvent(new Event("adassa-cookies-changed"));
+  setChoice(v);
+};
 
   if (choice) return null;
 
