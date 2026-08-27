@@ -155,7 +155,7 @@ export const defaultTexts = {
   "info.phone": "928 18 33 09",
   "info.whatsapp": "638 87 02 00",
   "info.email": "autoescueladassa@hotmail.com",
-  "info.hours": "Lunes a viernes: 10:00–13:00 y 15:00–20:00. Cerrado sábados y domingos.",
+  "info.hours": "Lunes a jueves: 9:30–13:00 y 15:30–20:00. Viernes: 9:30–13:00 y 15:30–19:00",
 
   "whatsapp.message": "Hola, quiero información sobre matricularme en Autoescuela Adassa",
 
