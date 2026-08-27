@@ -8,7 +8,7 @@ export function WhatsAppFab() {
   const message = useText("whatsapp.message");
   return (
     
-      href={`https://wa.me/34${number}?text=${encodeURIComponent(message)}`}
+      href={`href={`https://wa.me/34${number}?text=${encodeURIComponent(message)}`}`}
       target="_blank"
       rel="noopener noreferrer"
       aria-label="Escríbenos por WhatsApp"
