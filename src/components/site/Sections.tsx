@@ -371,6 +371,18 @@ export function Reviews() {
 }
 
 export function Locations() {
+    const [cookiesAccepted, setCookiesAccepted] = useState(false);
+
+  useEffect(() => {
+    const check = () => setCookiesAccepted(localStorage.getItem("adassa-cookies") === "all");
+    check();
+    window.addEventListener("adassa-cookies-changed", check);
+    window.addEventListener("storage", check);
+    return () => {
+      window.removeEventListener("adassa-cookies-changed", check);
+      window.removeEventListener("storage", check);
+    };
+  }, []);
   const addr1 = useText("locations.1.address");
   const addr2 = useText("locations.2.address");
   const addrs = [addr1, addr2];
@@ -384,6 +396,7 @@ export function Locations() {
             key={i}
             className="overflow-hidden rounded-2xl border border-border bg-background shadow-soft transition-all duration-300 hover:shadow-lift"
           >
+                      {cookiesAccepted ? (
             <iframe
               title={`Mapa sede ${i}`}
               className="h-56 w-full border-0"
@@ -391,6 +404,20 @@ export function Locations() {
               referrerPolicy="no-referrer-when-downgrade"
               src={`https://www.google.com/maps?q=${encodeURIComponent(addrs[i - 1] ?? "")}&output=embed`}
             />
+          ) : (
+            <div className="h-56 w-full flex flex-col items-center justify-center gap-2 bg-muted p-4 text-center text-sm text-muted-foreground">
+              <p>Para ver el mapa necesitamos tu consentimiento de cookies de terceros (Google Maps).</p>
+              <button
+                onClick={() => {
+                  localStorage.setItem("adassa-cookies", "all");
+                  window.dispatchEvent(new Event("adassa-cookies-changed"));
+                }}
+                className="rounded-full bg-primary px-4 py-2 text-xs font-bold text-primary-foreground"
+              >
+                Aceptar cookies y ver el mapa
+              </button>
+            </div>
+          )}
             <div className="p-6">
               <T k={`locations.${i}.name`} as="h3" className="text-xl font-bold" />
               <p className="mt-3 flex items-start gap-2 text-sm text-muted-foreground">
