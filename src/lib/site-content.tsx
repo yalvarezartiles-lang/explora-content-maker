@@ -261,14 +261,15 @@ export function SiteContentProvider({ children }: { children: ReactNode }) {
       settings: store.settings,
       editing,
       setEditing,
-      setText: (key, val) => persist({ ...store, texts: { ...store.texts, [key]: val } }),
-      setSetting: (key, val) => persist({ ...store, settings: { ...store.settings, [key]: val } }),
+      setText: (key, val) =>
+        persist({ ...store, texts: { ...store.texts, [key]: val } }, { key, value: val }),
+      setSetting: (key, val) =>
+        persist({ ...store, settings: { ...store.settings, [key]: val } }, {
+          key: SETTING_PREFIX + String(key),
+          value: String(val),
+        }),
       reset: () => {
-        try {
-          localStorage.removeItem(STORAGE_KEY);
-        } catch {
-          /* ignore */
-        }
+        void supabase.from("site_content").delete().neq("key", "");
         setStore({ texts: { ...defaultTexts }, settings: { ...defaultSettings } });
       },
       exportJson: () => JSON.stringify(store, null, 2),
