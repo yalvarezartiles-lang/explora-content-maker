@@ -321,6 +321,7 @@ export function T({
       data-key={k}
       onBlur={(e: React.FocusEvent<HTMLElement>) => {
         const next = e.currentTarget.innerText.trim();
+        console.log("BLUR", k, next, next !== value);
         if (next !== value) setText(k, next);
       }}
     >
