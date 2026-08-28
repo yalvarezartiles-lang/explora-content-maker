@@ -8,6 +8,7 @@ import {
   type ElementType,
   type ReactNode,
 } from "react";
+import { supabase } from "@/integrations/supabase/client";
 
 /**
  * Todos los textos de la web viven aquí.
@@ -196,8 +197,6 @@ type Store = {
   settings: SiteSettings;
 };
 
-const STORAGE_KEY = "adassa-site-content-v1";
-
 type Ctx = {
   texts: Record<string, string>;
   settings: SiteSettings;
@@ -211,6 +210,8 @@ type Ctx = {
 
 const SiteContext = createContext<Ctx | null>(null);
 
+const SETTING_PREFIX = "__setting.";
+
 export function SiteContentProvider({ children }: { children: ReactNode }) {
   const [store, setStore] = useState<Store>({
     texts: { ...defaultTexts },
@@ -219,30 +220,38 @@ export function SiteContentProvider({ children }: { children: ReactNode }) {
   const [editing, setEditing] = useState(false);
 
   useEffect(() => {
-    try {
-      const raw = localStorage.getItem(STORAGE_KEY);
-      if (raw) {
-        const parsed = JSON.parse(raw) as Partial<Store>;
-        setStore({
-          texts: { ...defaultTexts, ...(parsed.texts ?? {}) },
-          settings: { ...defaultSettings, ...(parsed.settings ?? {}) },
-        });
+    let cancelled = false;
+    (async () => {
+      const { data } = await supabase.from("site_content").select("key, value");
+      if (cancelled || !data) return;
+      const texts: Record<string, string> = {};
+      const settings: Partial<SiteSettings> = {};
+      for (const row of data) {
+        if (row.key.startsWith(SETTING_PREFIX)) {
+          const k = row.key.slice(SETTING_PREFIX.length) as keyof SiteSettings;
+          if (k === "showVideos") settings.showVideos = row.value === "true";
+        } else {
+          texts[row.key] = row.value;
+        }
       }
-    } catch {
-      /* ignore */
-    }
+      setStore({
+        texts: { ...defaultTexts, ...texts },
+        settings: { ...defaultSettings, ...settings },
+      });
+    })();
     if (new URLSearchParams(window.location.search).get("edit") === "1") {
       setEditing(true);
     }
+    return () => {
+      cancelled = true;
+    };
   }, []);
 
-  const persist = useCallback((next: Store) => {
+  const persist = useCallback((next: Store, changed: { key: string; value: string }) => {
     setStore(next);
-    try {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(next));
-    } catch {
-      /* ignore */
-    }
+    void supabase
+      .from("site_content")
+      .upsert({ key: changed.key, value: changed.value, updated_at: new Date().toISOString() });
   }, []);
 
   const value = useMemo<Ctx>(
@@ -251,14 +260,14 @@ export function SiteContentProvider({ children }: { children: ReactNode }) {
       settings: store.settings,
       editing,
       setEditing,
-      setText: (key, val) => persist({ ...store, texts: { ...store.texts, [key]: val } }),
-      setSetting: (key, val) => persist({ ...store, settings: { ...store.settings, [key]: val } }),
+      setText: (key, val) =>
+        persist({ ...store, texts: { ...store.texts, [key]: val } }, { key, value: val }),
+      setSetting: (key, val) =>
+        persist({ ...store, settings: { ...store.settings, [key]: val } }, {
+          key: SETTING_PREFIX + String(key),
+          value: String(val),
+        }),
       reset: () => {
-        try {
-          localStorage.removeItem(STORAGE_KEY);
-        } catch {
-          /* ignore */
-        }
         setStore({ texts: { ...defaultTexts }, settings: { ...defaultSettings } });
       },
       exportJson: () => JSON.stringify(store, null, 2),
