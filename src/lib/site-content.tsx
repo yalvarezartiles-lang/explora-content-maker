@@ -251,7 +251,13 @@ export function SiteContentProvider({ children }: { children: ReactNode }) {
     setStore(next);
     void supabase
       .from("site_content")
-      .upsert({ key: changed.key, value: changed.value, updated_at: new Date().toISOString() });
+      .upsert(
+        { key: changed.key, value: changed.value, updated_at: new Date().toISOString() },
+        { onConflict: "key" },
+      )
+      .then(({ error }) => {
+        if (error) console.error("No se pudo guardar el texto:", error.message);
+      });
   }, []);
 
   const value = useMemo<Ctx>(
