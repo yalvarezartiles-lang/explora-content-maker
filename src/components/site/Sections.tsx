@@ -446,6 +446,7 @@ export function Locations() {
 
 export function Contact() {
   const [accepted, setAccepted] = useState(false);
+  const [submitted, setSubmitted] = useState(false);
   const success = useText("contact.success");
   const privacyError = useText("contact.privacyError");
   const phone = useText("info.phone");
@@ -490,82 +491,118 @@ export function Contact() {
           </ul>
         </div>
 
-        <form
-          onSubmit={(e) => {
-            e.preventDefault();
-            if (!accepted) {
-              toast.error(privacyError);
-              return;
-            }
-            toast.success(success);
-            (e.currentTarget as HTMLFormElement).reset();
-            setAccepted(false);
-          }}
-          className="rounded-2xl border border-border bg-card p-6 shadow-soft md:p-8"
-        >
-          <div className="grid gap-4 sm:grid-cols-2">
-            <label className="text-sm font-semibold">
-              <T k="contact.name" />
-              <input
-                required
-                name="name"
-                className="mt-1.5 w-full rounded-lg border border-input bg-background px-3.5 py-2.5 text-sm font-normal outline-none focus:border-primary focus:ring-2 focus:ring-primary/25"
-              />
-            </label>
-            <label className="text-sm font-semibold">
-              <T k="contact.phone" />
-              <input
-                required
-                name="phone"
-                type="tel"
-                className="mt-1.5 w-full rounded-lg border border-input bg-background px-3.5 py-2.5 text-sm font-normal outline-none focus:border-primary focus:ring-2 focus:ring-primary/25"
-              />
-            </label>
+        {submitted ? (
+          <div className="flex flex-col items-center justify-center rounded-2xl border border-border bg-card p-6 shadow-soft md:p-8 text-center">
+            <div className="flex size-14 items-center justify-center rounded-full bg-primary-soft mb-4">
+              <svg className="size-7 text-primary-dark" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
+                <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
+              </svg>
+            </div>
+            <T k="contact.success" as="h3" className="text-xl font-bold" />
+            <p className="mt-2 text-sm text-muted-foreground">Hemos recibido tu mensaje. Te contactaremos muy pronto.</p>
           </div>
-          <label className="mt-4 block text-sm font-semibold">
-            <T k="contact.email" />
-            <input
-              required
-              name="email"
-              type="email"
-              className="mt-1.5 w-full rounded-lg border border-input bg-background px-3.5 py-2.5 text-sm font-normal outline-none focus:border-primary focus:ring-2 focus:ring-primary/25"
-            />
-          </label>
-          <label className="mt-4 block text-sm font-semibold">
-            <T k="contact.message" />
-            <textarea
-              required
-              name="message"
-              rows={4}
-              placeholder={useText("contact.messagePlaceholder")}
-              className="mt-1.5 w-full resize-y rounded-lg border border-input bg-background px-3.5 py-2.5 text-sm font-normal outline-none focus:border-primary focus:ring-2 focus:ring-primary/25"
-            />
-          </label>
-          <label className="mt-4 flex items-start gap-2.5 text-sm text-muted-foreground">
-            <input
-              type="checkbox"
-              checked={accepted}
-              onChange={(e) => setAccepted(e.target.checked)}
-              className="mt-0.5 size-4 accent-[oklch(0.63_0.17_152)]"
-            />
-            <span>
-              <T k="contact.privacy" />{" "}
-              <Link
-                to="/legal/$doc"
-                params={{ doc: "privacidad" }}
-                className="font-semibold text-primary-dark underline underline-offset-2"
-              >
-                Ver política
-              </Link>
-            </span>
-          </label>
-          <button
-            type="submit"
-            className="mt-6 w-full rounded-full bg-primary px-6 py-3.5 font-bold text-primary-foreground shadow-cta transition-all duration-250 hover:scale-[1.01] hover:bg-primary-dark"
+        ) : (
+          <form
+            name="contacto-adassa"
+            method="POST"
+            data-netlify="true"
+            data-netlify-honeypot="bot-field"
+            onSubmit={(e) => {
+              e.preventDefault();
+              if (!accepted) {
+                toast.error(privacyError);
+                return;
+              }
+              const form = e.currentTarget;
+              const formData = new FormData(form);
+              
+              fetch("/", {
+                method: "POST",
+                headers: { "Content-Type": "application/x-www-form-urlencoded" },
+                body: new URLSearchParams(formData as any).toString(),
+              })
+                .then(() => {
+                  setSubmitted(true);
+                  form.reset();
+                  setAccepted(false);
+                })
+                .catch(() => {
+                  toast.error("Error al enviar. Inténtalo de nuevo o escríbenos por WhatsApp.");
+                });
+            }}
+            className="rounded-2xl border border-border bg-card p-6 shadow-soft md:p-8"
           >
-            <T k="contact.submit" />
-          </button>
-        </form>
+            {/* Campo honeypot anti-spam (oculto) */}
+            <p className="hidden">
+              <label>
+                No rellenes esto: <input name="bot-field" />
+              </label>
+            </p>
+
+            <div className="grid gap-4 sm:grid-cols-2">
+              <label className="text-sm font-semibold">
+                <T k="contact.name" />
+                <input
+                  required
+                  name="name"
+                  className="mt-1.5 w-full rounded-lg border border-input bg-background px-3.5 py-2.5 text-sm font-normal outline-none focus:border-primary focus:ring-2 focus:ring-primary/25"
+                />
+              </label>
+              <label className="text-sm font-semibold">
+                <T k="contact.phone" />
+                <input
+                  required
+                  name="phone"
+                  type="tel"
+                  className="mt-1.5 w-full rounded-lg border border-input bg-background px-3.5 py-2.5 text-sm font-normal outline-none focus:border-primary focus:ring-2 focus:ring-primary/25"
+                />
+              </label>
+            </div>
+            <label className="mt-4 block text-sm font-semibold">
+              <T k="contact.email" />
+              <input
+                required
+                name="email"
+                type="email"
+                className="mt-1.5 w-full rounded-lg border border-input bg-background px-3.5 py-2.5 text-sm font-normal outline-none focus:border-primary focus:ring-2 focus:ring-primary/25"
+              />
+            </label>
+            <label className="mt-4 block text-sm font-semibold">
+              <T k="contact.message" />
+              <textarea
+                required
+                name="message"
+                rows={4}
+                placeholder={useText("contact.messagePlaceholder")}
+                className="mt-1.5 w-full resize-y rounded-lg border border-input bg-background px-3.5 py-2.5 text-sm font-normal outline-none focus:border-primary focus:ring-2 focus:ring-primary/25"
+              />
+            </label>
+            <label className="mt-4 flex items-start gap-2.5 text-sm text-muted-foreground">
+              <input
+                type="checkbox"
+                checked={accepted}
+                onChange={(e) => setAccepted(e.target.checked)}
+                className="mt-0.5 size-4 accent-[oklch(0.63_0.17_152)]"
+              />
+              <span>
+                <T k="contact.privacy" />{" "}
+                <Link
+                  to="/legal/$doc"
+                  params={{ doc: "privacidad" }}
+                  className="font-semibold text-primary-dark underline underline-offset-2"
+                >
+                  Ver política
+                </Link>
+              </span>
+            </label>
+            <button
+              type="submit"
+              className="mt-6 w-full rounded-full bg-primary px-6 py-3.5 font-bold text-primary-foreground shadow-cta transition-all duration-250 hover:scale-[1.01] hover:bg-primary-dark"
+            >
+              <T k="contact.submit" />
+            </button>
+          </form>
+        )}
       </div>
     </Section>
   );
