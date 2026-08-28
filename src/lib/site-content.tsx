@@ -160,7 +160,7 @@ export const defaultTexts = {
   "whatsapp.message": "Hola, quiero información sobre matricularme en Autoescuela Adassa",
 
   "footer.text": "Centro de educación vial en Agüimes y Santa Lucía de Tirajana.",
-  "footer.legalName": "Titular: [Nombre / Razón social] · NIF/CIF: [Completar]",
+  "footer.legalName": "Titular: Francisca Artiles Garcia · NIF/CIF: 43276458A",
   "footer.rights": "© 2026 Autoescuela Adassa. Todos los derechos reservados.",
 
   "cookies.text":
