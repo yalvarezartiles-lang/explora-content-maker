@@ -211,6 +211,8 @@ type Ctx = {
 
 const SiteContext = createContext<Ctx | null>(null);
 
+const SETTING_PREFIX = "__setting.";
+
 export function SiteContentProvider({ children }: { children: ReactNode }) {
   const [store, setStore] = useState<Store>({
     texts: { ...defaultTexts },
@@ -219,30 +221,38 @@ export function SiteContentProvider({ children }: { children: ReactNode }) {
   const [editing, setEditing] = useState(false);
 
   useEffect(() => {
-    try {
-      const raw = localStorage.getItem(STORAGE_KEY);
-      if (raw) {
-        const parsed = JSON.parse(raw) as Partial<Store>;
-        setStore({
-          texts: { ...defaultTexts, ...(parsed.texts ?? {}) },
-          settings: { ...defaultSettings, ...(parsed.settings ?? {}) },
-        });
+    let cancelled = false;
+    (async () => {
+      const { data } = await supabase.from("site_content").select("key, value");
+      if (cancelled || !data) return;
+      const texts: Record<string, string> = {};
+      const settings: Partial<SiteSettings> = {};
+      for (const row of data) {
+        if (row.key.startsWith(SETTING_PREFIX)) {
+          const k = row.key.slice(SETTING_PREFIX.length) as keyof SiteSettings;
+          if (k === "showVideos") settings.showVideos = row.value === "true";
+        } else {
+          texts[row.key] = row.value;
+        }
       }
-    } catch {
-      /* ignore */
-    }
+      setStore({
+        texts: { ...defaultTexts, ...texts },
+        settings: { ...defaultSettings, ...settings },
+      });
+    })();
     if (new URLSearchParams(window.location.search).get("edit") === "1") {
       setEditing(true);
     }
+    return () => {
+      cancelled = true;
+    };
   }, []);
 
-  const persist = useCallback((next: Store) => {
+  const persist = useCallback((next: Store, changed: { key: string; value: string }) => {
     setStore(next);
-    try {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(next));
-    } catch {
-      /* ignore */
-    }
+    void supabase
+      .from("site_content")
+      .upsert({ key: changed.key, value: changed.value, updated_at: new Date().toISOString() });
   }, []);
 
   const value = useMemo<Ctx>(
