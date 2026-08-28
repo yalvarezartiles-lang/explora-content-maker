@@ -515,19 +515,24 @@ export function Contact() {
               }
               const form = e.currentTarget;
               const formData = new FormData(form);
-              
-              fetch("/", {
-                method: "POST",
-                headers: { "Content-Type": "application/x-www-form-urlencoded" },
-                body: new URLSearchParams(formData as any).toString(),
-              })
-                .then(() => {
+              if (String(formData.get("bot-field") ?? "")) return;
+
+              void supabase
+                .from("contact_submissions")
+                .insert({
+                  name: String(formData.get("name") ?? ""),
+                  phone: String(formData.get("phone") ?? ""),
+                  email: String(formData.get("email") ?? ""),
+                  message: String(formData.get("message") ?? ""),
+                })
+                .then(({ error }) => {
+                  if (error) {
+                    toast.error("Error al enviar. Inténtalo de nuevo o escríbenos por WhatsApp.");
+                    return;
+                  }
                   setSubmitted(true);
                   form.reset();
                   setAccepted(false);
-                })
-                .catch(() => {
-                  toast.error("Error al enviar. Inténtalo de nuevo o escríbenos por WhatsApp.");
                 });
             }}
             className="rounded-2xl border border-border bg-card p-6 shadow-soft md:p-8"
