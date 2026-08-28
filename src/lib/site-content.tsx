@@ -8,6 +8,7 @@ import {
   type ElementType,
   type ReactNode,
 } from "react";
+import { supabase } from "@/integrations/supabase/client";
 
 /**
  * Todos los textos de la web viven aquí.
@@ -196,8 +197,6 @@ type Store = {
   settings: SiteSettings;
 };
 
-const STORAGE_KEY = "adassa-site-content-v1";
-
 type Ctx = {
   texts: Record<string, string>;
   settings: SiteSettings;
@@ -269,7 +268,6 @@ export function SiteContentProvider({ children }: { children: ReactNode }) {
           value: String(val),
         }),
       reset: () => {
-        void supabase.from("site_content").delete().neq("key", "");
         setStore({ texts: { ...defaultTexts }, settings: { ...defaultSettings } });
       },
       exportJson: () => JSON.stringify(store, null, 2),
