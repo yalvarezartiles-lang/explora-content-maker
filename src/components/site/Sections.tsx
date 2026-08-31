@@ -47,8 +47,9 @@ function HeroCarousel() {
             idx === i ? "opacity-100" : "opacity-0"
           }`}
         >
-          <img
-            src={s.img}
+          <Img
+            k={`hero.slide.${s.k}.img`}
+            fallback={s.img}
             alt={s.alt}
             width={1408}
             height={1104}
