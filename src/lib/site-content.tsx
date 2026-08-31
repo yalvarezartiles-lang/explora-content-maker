@@ -296,6 +296,112 @@ export function useText(key: TextKey | string) {
 }
 
 /** Texto editable. En modo edición se puede escribir directamente encima. */
+const BUCKET = "site-images";
+const signedCache = new Map<string, string>();
+
+function useResolvedImage(value: string | undefined, fallback: string) {
+  const [url, setUrl] = useState<string>(() => {
+    if (!value) return fallback;
+    if (/^(https?:|data:|\/)/.test(value)) return value;
+    return signedCache.get(value) ?? fallback;
+  });
+
+  useEffect(() => {
+    let cancelled = false;
+    if (!value) {
+      setUrl(fallback);
+      return;
+    }
+    if (/^(https?:|data:|\/)/.test(value)) {
+      setUrl(value);
+      return;
+    }
+    const cached = signedCache.get(value);
+    if (cached) {
+      setUrl(cached);
+      return;
+    }
+    (async () => {
+      const { data } = await supabase.storage.from(BUCKET).createSignedUrl(value, 60 * 60 * 24 * 365);
+      if (cancelled || !data?.signedUrl) return;
+      signedCache.set(value, data.signedUrl);
+      setUrl(data.signedUrl);
+    })();
+    return () => {
+      cancelled = true;
+    };
+  }, [value, fallback]);
+
+  return url;
+}
+
+/** Imagen editable. En modo edición (?edit=1) se puede subir una foto nueva. */
+export function Img({
+  k,
+  fallback,
+  alt,
+  className,
+  width,
+  height,
+  loading,
+}: {
+  k: TextKey | string;
+  fallback: string;
+  alt: string;
+  className?: string;
+  width?: number;
+  height?: number;
+  loading?: "eager" | "lazy";
+}) {
+  const { texts, editing, setText } = useSite();
+  const src = useResolvedImage(texts[k], fallback);
+  const [uploading, setUploading] = useState(false);
+
+  const img = (
+    <img
+      src={src}
+      alt={alt}
+      width={width}
+      height={height}
+      loading={loading}
+      className={className}
+    />
+  );
+
+  if (!editing) return img;
+
+  const onFile = async (file: File) => {
+    setUploading(true);
+    const ext = file.name.split(".").pop() || "jpg";
+    const path = `${String(k).replace(/[^a-z0-9.]/gi, "-")}-${Date.now()}.${ext}`;
+    const { error } = await supabase.storage.from(BUCKET).upload(path, file, { upsert: true });
+    setUploading(false);
+    if (error) {
+      console.error("No se pudo subir la imagen:", error.message);
+      return;
+    }
+    setText(String(k), path);
+  };
+
+  return (
+    <div className="relative size-full">
+      {img}
+      <label className="absolute inset-0 z-20 flex cursor-pointer items-center justify-center bg-black/45 text-sm font-semibold text-white opacity-0 transition-opacity hover:opacity-100">
+        {uploading ? "Subiendo..." : "Cambiar foto"}
+        <input
+          type="file"
+          accept="image/*"
+          className="hidden"
+          onChange={(e) => {
+            const f = e.target.files?.[0];
+            if (f) void onFile(f);
+          }}
+        />
+      </label>
+    </div>
+  );
+}
+
 export function T({
   k,
   as: Tag = "span",
