@@ -11,7 +11,7 @@ import { useEffect, type ReactNode } from "react";
 
 import appCss from "../styles.css?url";
 import { reportLovableError } from "../lib/lovable-error-reporting";
-import { SiteContentProvider } from "../lib/site-content";
+import { SiteContentProvider } from "@/lib/site-content";
 import { Toaster } from "../components/ui/sonner";
 
 
