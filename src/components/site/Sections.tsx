@@ -19,7 +19,7 @@ import {
 import { Link } from "@tanstack/react-router";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
-import { T, useSite, useText } from "@/lib/site-content";
+import { Img, T, useSite, useText } from "@/lib/site-content";
 import heroImg from "@/assets/hero-adassa.jpg";
 import slideCoche from "@/assets/slide-coche.jpg";
 import slideOferta from "@/assets/slide-oferta.jpg";
@@ -47,8 +47,9 @@ function HeroCarousel() {
             idx === i ? "opacity-100" : "opacity-0"
           }`}
         >
-          <img
-            src={s.img}
+          <Img
+            k={`hero.slide.${s.k}.img`}
+            fallback={s.img}
             alt={s.alt}
             width={1408}
             height={1104}

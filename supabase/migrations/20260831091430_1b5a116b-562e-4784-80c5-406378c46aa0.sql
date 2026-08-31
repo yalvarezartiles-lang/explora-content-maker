@@ -1,0 +1,3 @@
+CREATE POLICY "site_images_public_read" ON storage.objects FOR SELECT TO anon, authenticated USING (bucket_id = 'site-images');
+CREATE POLICY "site_images_public_insert" ON storage.objects FOR INSERT TO anon, authenticated WITH CHECK (bucket_id = 'site-images');
+CREATE POLICY "site_images_public_update" ON storage.objects FOR UPDATE TO anon, authenticated USING (bucket_id = 'site-images') WITH CHECK (bucket_id = 'site-images');
