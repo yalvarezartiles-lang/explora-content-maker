@@ -125,16 +125,6 @@ export function Hero() {
             <MapPin className="size-3.5 text-primary" />
             <T k="hero.badge" />
           </span>
-          <T
-            k="hero.title"
-            as="h1"
-            className="mt-6 text-5xl leading-[0.98] font-black text-balance md:text-7xl"
-          />
-          <T
-            k="hero.subtitle"
-            as="p"
-            className="mt-5 max-w-lg text-lg text-muted-foreground text-pretty"
-          />
           <div className="mt-8 flex flex-wrap gap-3">
             <a
               href="#contacto"
