@@ -38,12 +38,12 @@ export const defaultTexts = {
   "hero.note": "Lunes a jueves · 9:30–13:00 y 15:30–20:00",
   "hero.note2": "Viernes · 9:30–13:00 y 15:30–19:00",
 
-  "hero.slide.1.title": "Clases prácticas a tu ritmo",
-  "hero.slide.1.text": "Profesores cercanos y coches revisados al día.",
-  "hero.slide.2.title": "Nuestra flota",
-  "hero.slide.2.text": "Vehículos modernos, cómodos y siempre a punto.",
-  "hero.slide.3.title": "Oferta: matrícula + teórica",
-  "hero.slide.3.text": "Consulta las promociones vigentes de este mes.",
+  "hero.slide.1.title": "",
+  "hero.slide.1.text": "",
+  "hero.slide.2.title": "",
+  "hero.slide.2.text": "",
+  "hero.slide.3.title": "",
+  "hero.slide.3.text": "",
 
 
   "trust.1.value": "5,0★",
