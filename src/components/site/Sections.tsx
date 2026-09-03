@@ -220,54 +220,84 @@ export function Info() {
   );
 }
 
+function PlanCard({
+  prefix,
+  features,
+  featured = false,
+}: {
+  prefix: string;
+  features: string[];
+  featured?: boolean;
+}) {
+  return (
+    <article
+      className={`relative flex flex-col rounded-3xl border bg-card p-6 transition-all duration-300 sm:p-8 ${
+        featured
+          ? "border-2 border-primary shadow-lift lg:-translate-y-2"
+          : "border-border shadow-soft hover:-translate-y-1 hover:shadow-lift"
+      }`}
+    >
+      {featured && (
+        <T
+          k={`${prefix}.badge`}
+          as="span"
+          className="absolute -top-3.5 left-1/2 -translate-x-1/2 rounded-full bg-amber px-4 py-1.5 text-xs font-black tracking-wide whitespace-nowrap text-amber-foreground uppercase shadow-soft"
+        />
+      )}
+      <T k={`${prefix}.title`} as="h3" className="text-2xl font-black tracking-tight" />
+      <T k={`${prefix}.price`} as="p" className="mt-4 font-display text-5xl font-black text-primary-dark" />
+      <T k={`${prefix}.subtitle`} as="p" className="mt-2 text-sm text-muted-foreground" />
+
+      <ul className="mt-7 grid flex-1 content-start gap-3">
+        {features.map((k) => (
+          <li key={k} className="flex min-w-0 items-start gap-2.5">
+            <span className="mt-0.5 grid size-5 shrink-0 place-items-center rounded-full bg-primary text-primary-foreground">
+              <Check className="size-3.5" />
+            </span>
+            <T k={k} className="text-sm font-medium" />
+          </li>
+        ))}
+      </ul>
+
+      <a
+        href="#contacto"
+        className={
+          featured
+            ? "mt-8 inline-flex w-full items-center justify-center rounded-full bg-primary px-5 py-3.5 text-sm font-bold text-primary-foreground shadow-cta transition-all duration-250 hover:scale-[1.02] hover:bg-primary-dark"
+            : "mt-8 inline-flex w-full items-center justify-center rounded-full border-2 border-primary px-5 py-3.5 text-sm font-bold text-primary-dark transition-all duration-250 hover:scale-[1.02] hover:bg-primary-soft"
+        }
+      >
+        <T k={`${prefix}.cta`} />
+      </a>
+      {featured && (
+        <T k={`${prefix}.legal`} as="p" className="mt-4 text-center text-xs text-muted-foreground" />
+      )}
+    </article>
+  );
+}
+
 export function Pack() {
   return (
     <Section id="pack" className="bg-background">
-      <div className="relative overflow-hidden rounded-3xl border border-border bg-card p-6 shadow-lift sm:p-10">
-        <div
-          className="pointer-events-none absolute -top-24 -right-24 size-[26rem] rounded-full opacity-60 blur-3xl"
-          style={{ background: "radial-gradient(circle, var(--primary-soft), transparent 70%)" }}
-          aria-hidden
+      <div className="max-w-2xl">
+        <T
+          k="pack.badge"
+          as="p"
+          className="inline-flex rounded-full bg-primary-soft px-3 py-1 text-xs font-bold tracking-wide text-accent-foreground uppercase"
         />
-        <div className="relative grid gap-10 lg:grid-cols-[minmax(0,1fr)_auto] lg:items-center">
-          <div className="min-w-0">
-            <T
-              k="pack.badge"
-              as="p"
-              className="inline-flex rounded-full bg-primary-soft px-3 py-1 text-xs font-bold tracking-wide text-accent-foreground uppercase"
-            />
-            <T k="pack.title" as="h2" className="mt-4 text-4xl font-black tracking-tight md:text-6xl" />
-            <T k="pack.subtitle" as="p" className="mt-3 max-w-xl text-lg text-muted-foreground" />
+        <T k="pack.title" as="h2" className="mt-4 text-4xl font-black tracking-tight md:text-5xl" />
+        <T k="pack.subtitle" as="p" className="mt-3 text-lg text-muted-foreground" />
+      </div>
 
-            <ul className="mt-8 grid gap-3 sm:grid-cols-2">
-              {["pack.f1", "pack.f2", "pack.f3", "pack.f4"].map((k) => (
-                <li key={k} className="flex min-w-0 items-start gap-2.5">
-                  <span className="mt-0.5 grid size-5 shrink-0 place-items-center rounded-full bg-primary text-primary-foreground">
-                    <Check className="size-3.5" />
-                  </span>
-                  <T k={k} className="text-sm font-medium sm:text-base" />
-                </li>
-              ))}
-            </ul>
+      <div className="mt-12 grid gap-6 md:grid-cols-2 lg:gap-8">
+        <PlanCard prefix="pack.b" features={["pack.b.f1", "pack.b.f2", "pack.b.f3"]} />
+        <PlanCard prefix="pack.w" features={["pack.w.f1", "pack.w.f2", "pack.w.f3"]} featured />
+      </div>
 
-            <div className="mt-6 inline-flex max-w-full flex-wrap items-center gap-2 rounded-2xl bg-amber/20 px-4 py-3">
-              <Sparkles className="size-4 shrink-0 text-amber-foreground" />
-              <T k="pack.highlight" className="text-sm font-black text-amber-foreground" />
-              <T k="pack.highlightNote" className="text-xs text-muted-foreground" />
-            </div>
-          </div>
-
-          <div className="rounded-2xl border border-border bg-background p-6 text-center shadow-soft lg:w-72">
-            <T k="pack.price" as="p" className="font-display text-6xl font-black text-primary-dark md:text-7xl" />
-            <T k="pack.priceNote" as="p" className="mt-2 text-xs text-muted-foreground" />
-            <a
-              href="#contacto"
-              className="mt-6 inline-flex w-full items-center justify-center rounded-full bg-primary px-5 py-3.5 text-sm font-bold text-primary-foreground shadow-cta transition-all duration-250 hover:scale-[1.02] hover:bg-primary-dark"
-            >
-              <T k="pack.cta" />
-            </a>
-          </div>
-        </div>
+      <div className="mt-8 inline-flex max-w-full flex-wrap items-center gap-2 rounded-2xl bg-amber/20 px-4 py-3">
+        <Sparkles className="size-4 shrink-0 text-amber-foreground" />
+        <T k="pack.highlight" className="text-sm font-black text-amber-foreground" />
+        <T k="pack.highlightNote" className="text-xs text-muted-foreground" />
       </div>
     </Section>
   );
