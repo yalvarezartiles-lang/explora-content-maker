@@ -233,16 +233,18 @@ function PlanCard({
     <article
       className={`relative flex flex-col rounded-3xl border bg-card p-6 transition-all duration-300 sm:p-8 ${
         featured
-          ? "border-2 border-primary shadow-lift lg:-translate-y-2"
+          ? "border-2 border-primary pt-10 shadow-lift sm:pt-12 lg:-translate-y-2"
           : "border-border shadow-soft hover:-translate-y-1 hover:shadow-lift"
       }`}
     >
       {featured && (
-        <T
-          k={`${prefix}.badge`}
-          as="span"
-          className="absolute -top-3.5 left-1/2 -translate-x-1/2 rounded-full bg-amber px-4 py-1.5 text-xs font-black tracking-wide whitespace-nowrap text-amber-foreground uppercase shadow-soft"
-        />
+        <div className="absolute inset-x-0 -top-3.5 flex justify-center px-4">
+          <T
+            k={`${prefix}.badge`}
+            as="span"
+            className="max-w-full truncate rounded-full bg-primary px-4 py-1.5 text-xs font-black tracking-wide text-primary-foreground uppercase shadow-cta"
+          />
+        </div>
       )}
       <T k={`${prefix}.title`} as="h3" className="text-2xl font-black tracking-tight" />
       <T k={`${prefix}.price`} as="p" className="mt-4 font-display text-5xl font-black text-primary-dark" />
