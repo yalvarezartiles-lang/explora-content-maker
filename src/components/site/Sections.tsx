@@ -15,6 +15,8 @@ import {
   PlayCircle,
   ArrowUpRight,
   ShieldCheck,
+  Check,
+  Sparkles,
 } from "lucide-react";
 import { Link } from "@tanstack/react-router";
 import { toast } from "sonner";
@@ -213,6 +215,59 @@ export function Info() {
             <T k={`info.${idx + 1}.text`} as="p" className="mt-2 text-sm text-muted-foreground" />
           </div>
         ))}
+      </div>
+    </Section>
+  );
+}
+
+export function Pack() {
+  return (
+    <Section id="pack" className="bg-background">
+      <div className="relative overflow-hidden rounded-3xl border border-border bg-card p-6 shadow-lift sm:p-10">
+        <div
+          className="pointer-events-none absolute -top-24 -right-24 size-[26rem] rounded-full opacity-60 blur-3xl"
+          style={{ background: "radial-gradient(circle, var(--primary-soft), transparent 70%)" }}
+          aria-hidden
+        />
+        <div className="relative grid gap-10 lg:grid-cols-[minmax(0,1fr)_auto] lg:items-center">
+          <div className="min-w-0">
+            <T
+              k="pack.badge"
+              as="p"
+              className="inline-flex rounded-full bg-primary-soft px-3 py-1 text-xs font-bold tracking-wide text-accent-foreground uppercase"
+            />
+            <T k="pack.title" as="h2" className="mt-4 text-4xl font-black tracking-tight md:text-6xl" />
+            <T k="pack.subtitle" as="p" className="mt-3 max-w-xl text-lg text-muted-foreground" />
+
+            <ul className="mt-8 grid gap-3 sm:grid-cols-2">
+              {["pack.f1", "pack.f2", "pack.f3", "pack.f4"].map((k) => (
+                <li key={k} className="flex min-w-0 items-start gap-2.5">
+                  <span className="mt-0.5 grid size-5 shrink-0 place-items-center rounded-full bg-primary text-primary-foreground">
+                    <Check className="size-3.5" />
+                  </span>
+                  <T k={k} className="text-sm font-medium sm:text-base" />
+                </li>
+              ))}
+            </ul>
+
+            <div className="mt-6 inline-flex max-w-full flex-wrap items-center gap-2 rounded-2xl bg-amber/20 px-4 py-3">
+              <Sparkles className="size-4 shrink-0 text-amber-foreground" />
+              <T k="pack.highlight" className="text-sm font-black text-amber-foreground" />
+              <T k="pack.highlightNote" className="text-xs text-muted-foreground" />
+            </div>
+          </div>
+
+          <div className="rounded-2xl border border-border bg-background p-6 text-center shadow-soft lg:w-72">
+            <T k="pack.price" as="p" className="font-display text-6xl font-black text-primary-dark md:text-7xl" />
+            <T k="pack.priceNote" as="p" className="mt-2 text-xs text-muted-foreground" />
+            <a
+              href="#contacto"
+              className="mt-6 inline-flex w-full items-center justify-center rounded-full bg-primary px-5 py-3.5 text-sm font-bold text-primary-foreground shadow-cta transition-all duration-250 hover:scale-[1.02] hover:bg-primary-dark"
+            >
+              <T k="pack.cta" />
+            </a>
+          </div>
+        </div>
       </div>
     </Section>
   );
