@@ -54,6 +54,7 @@ export const defaultTexts = {
   "pack.w.cta": "¡Quiero el Pack Bienvenida!",
   "pack.w.legal": "*Tasa oficial de la DGT (94,04 €) no incluida, a abonar al subir a examen.",
 
+  
   "hero.badge": "Cruce de Arinaga · Vecindario",
   "hero.title": "Sácate el carné sin líos, a tu ritmo",
   "hero.subtitle":
