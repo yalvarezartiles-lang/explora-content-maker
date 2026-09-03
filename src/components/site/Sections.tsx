@@ -293,7 +293,7 @@ export function Pack() {
 
       <div className="mt-12 grid gap-6 md:grid-cols-2 lg:gap-8">
         <PlanCard prefix="pack.b" features={["pack.b.f1", "pack.b.f2", "pack.b.f3"]} />
-        <PlanCard prefix="pack.w" features={["pack.w.f1", "pack.w.f2", "pack.w.f3"]} featured />
+        <PlanCard prefix="pack.w" features={["pack.w.f1", "pack.w.f2", "pack.w.f3", "pack.w.f4"]} featured />
       </div>
 
       <div className="mt-8 inline-flex max-w-full flex-wrap items-center gap-2 rounded-2xl bg-amber/20 px-4 py-3">
