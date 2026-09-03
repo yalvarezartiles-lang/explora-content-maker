@@ -46,12 +46,12 @@ export const defaultTexts = {
   "pack.w.title": "Pack Bienvenida B",
   "pack.w.badge": "Más popular",
   "pack.w.price": "255 €",
-  "pack.w.subtitle": "Tus primeras 5 prácticas a solo 27,81 €/clase.",
+  "pack.w.subtitle": "Tu pase directo al volante.",
   "pack.w.f1": "Todo lo incluido en la Matrícula Básica",
-  "pack.w.f2": "5 Prácticas de circulación",
-  "pack.w.f3": "1 Examen práctico incluido",
+  "pack.b.f2": "2 Meses gratis de App de Test"
+  "pack.w.f3": "5 Prácticas de circulación",
+  "pack.w.f4": "1 Examen práctico incluido",
   "pack.w.cta": "¡Quiero el Pack Bienvenida!",
-  "pack.w.legal": "*Tasa oficial de la DGT (94,04 €) no incluida, a abonar al subir a examen.",
 
   "hero.badge": "Cruce de Arinaga · Vecindario",
   "hero.title": "Sácate el carné sin líos, a tu ritmo",
