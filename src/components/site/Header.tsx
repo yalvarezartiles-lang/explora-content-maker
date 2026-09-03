@@ -31,7 +31,6 @@ export function Header() {
   const links: { href: string; k: string }[] = [
     { href: "#inicio", k: "nav.inicio" },
     { href: "#informacion", k: "nav.info" },
-    { href: "#cursos", k: "nav.cursos" },
     { href: "#dgt", k: "nav.dgt" },
     ...(settings.showVideos ? [{ href: "#videos", k: "nav.videos" }] : []),
     { href: "#resenas", k: "nav.resenas" },
@@ -75,7 +74,7 @@ export function Header() {
             {phone}
           </a>
           <a
-            href="#contacto"
+            href="#pack"
             className="hidden rounded-full bg-primary px-4 py-2.5 text-sm font-bold text-primary-foreground shadow-cta transition-all duration-250 hover:scale-[1.03] hover:bg-primary-dark sm:inline-block"
           >
             <T k="nav.cta" />
@@ -103,6 +102,13 @@ export function Header() {
                 <T k={l.k} />
               </a>
             ))}
+            <a
+              href="#pack"
+              onClick={() => setOpen(false)}
+              className="mt-2 rounded-full bg-primary px-4 py-3 text-center text-sm font-bold text-primary-foreground shadow-cta"
+            >
+              <T k="nav.cta" />
+            </a>
           </nav>
         </div>
       )}

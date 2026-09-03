@@ -5,6 +5,7 @@ import {
   Hero,
   TrustBar,
   Info,
+  Pack,
   Courses,
   Dgt,
   Videos,
@@ -39,6 +40,7 @@ function Index() {
         <Hero />
         <TrustBar />
         <Info />
+        <Pack />
         <Courses />
         <Dgt />
         <Videos />
