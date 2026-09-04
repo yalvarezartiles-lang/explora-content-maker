@@ -1,24 +1,15 @@
 /**
  * Configuración del formulario de Google Forms.
- *
- * CÓMO RELLENARLO:
- * 1. Abre tu formulario en Google Forms y pulsa "Enviar" > icono del enlace.
- *    El enlace es del tipo:
- *      https://docs.google.com/forms/d/e/1FAIpQLSxxxxxxxxxxxxxxxxxxx/viewform
- *    Copia ese ID largo (1FAIpQLSxxxx...) en FORM_ID.
- * 2. Abre el formulario público, pulsa clic derecho > "Inspeccionar" en cada
- *    campo y copia el atributo name (tiene la forma "entry.123456789").
- *    Pega cada uno en ENTRY_IDS.
- *
- * Mientras FORM_ID esté vacío, el formulario avisa de que falta configurarlo.
+ * Enlace: https://forms.gle/giAS9aYNeUBe3Yrq7
+ * Los identificadores (entry.XXXX) salen del HTML público del formulario.
  */
 export const GOOGLE_FORM = {
-  FORM_ID: "",
+  FORM_ID: "1FAIpQLSeywNsuy_rsyT4blfH-BTXPDHB_Y9JCW-6FpfZ6-elfFAgFHA",
   ENTRY_IDS: {
-    name: "",
-    phone: "",
-    email: "",
-    message: "",
+    name: "entry.2021154661",
+    phone: "entry.1891195714",
+    email: "entry.484024409",
+    message: "entry.1480395927",
   },
   /** Opcional: enlace para incrustar el formulario tal cual (iframe). */
   EMBED_URL: "",
