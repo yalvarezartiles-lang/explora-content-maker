@@ -272,7 +272,14 @@ function PlanCard({
         <T k={`${prefix}.cta`} />
       </a>
       {featured && (
-        <T k={`${prefix}.legal`} as="p" className="mt-4 text-center text-xs text-muted-foreground" />
+        <>
+          <div className="mt-6 flex flex-wrap items-center gap-2 rounded-2xl bg-amber/20 px-4 py-3">
+            <Sparkles className="size-4 shrink-0 text-amber-foreground" />
+            <T k="pack.highlight" className="text-sm font-black text-amber-foreground" />
+            <T k="pack.highlightNote" className="text-xs text-muted-foreground" />
+          </div>
+          <T k={`${prefix}.legal`} as="p" className="mt-4 text-center text-xs text-muted-foreground" />
+        </>
       )}
     </article>
   );
@@ -293,13 +300,11 @@ export function Pack() {
 
       <div className="mt-12 grid gap-6 md:grid-cols-2 lg:gap-8">
         <PlanCard prefix="pack.b" features={["pack.b.f1", "pack.b.f2", "pack.b.f3"]} />
-        <PlanCard prefix="pack.w" features={["pack.w.f1", "pack.w.f2", "pack.w.f3"]} featured />
-      </div>
-
-      <div className="mt-8 inline-flex max-w-full flex-wrap items-center gap-2 rounded-2xl bg-amber/20 px-4 py-3">
-        <Sparkles className="size-4 shrink-0 text-amber-foreground" />
-        <T k="pack.highlight" className="text-sm font-black text-amber-foreground" />
-        <T k="pack.highlightNote" className="text-xs text-muted-foreground" />
+        <PlanCard
+          prefix="pack.w"
+          features={["pack.w.f1", "pack.w.f2", "pack.w.f3", "pack.w.f4", "pack.w.f5"]}
+          featured
+        />
       </div>
     </Section>
   );
