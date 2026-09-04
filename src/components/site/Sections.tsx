@@ -20,7 +20,7 @@ import {
 } from "lucide-react";
 import { Link } from "@tanstack/react-router";
 import { toast } from "sonner";
-import { supabase } from "@/integrations/supabase/client";
+import { isGoogleFormConfigured, submitToGoogleForm } from "@/lib/google-form";
 import { Img, T, useSite, useText } from "@/lib/site-content";
 import heroImg from "@/assets/hero-adassa.jpg";
 import slideCoche from "@/assets/slide-coche.jpg";
@@ -599,8 +599,6 @@ export function Contact() {
           <form
             name="contacto-adassa"
             method="POST"
-            data-netlify="true"
-            data-netlify-honeypot="bot-field"
             onSubmit={(e) => {
               e.preventDefault();
               if (!accepted) {
@@ -611,26 +609,31 @@ export function Contact() {
               const formData = new FormData(form);
               if (String(formData.get("bot-field") ?? "")) return;
 
-              void supabase
-                .from("contact_submissions")
-                .insert({
-                  name: String(formData.get("name") ?? ""),
-                  phone: String(formData.get("phone") ?? ""),
-                  email: String(formData.get("email") ?? ""),
-                  message: String(formData.get("message") ?? ""),
-                })
-                .then(({ error }) => {
-                  if (error) {
-                    toast.error("Error al enviar. Inténtalo de nuevo o escríbenos por WhatsApp.");
-                    return;
-                  }
+              if (!isGoogleFormConfigured()) {
+                toast.error(
+                  "El formulario aún no está conectado. Escríbenos por WhatsApp mientras tanto.",
+                );
+                return;
+              }
+
+              void submitToGoogleForm({
+                name: String(formData.get("name") ?? ""),
+                phone: String(formData.get("phone") ?? ""),
+                email: String(formData.get("email") ?? ""),
+                message: String(formData.get("message") ?? ""),
+              })
+                .then(() => {
                   setSubmitted(true);
                   form.reset();
                   setAccepted(false);
+                })
+                .catch(() => {
+                  toast.error("Error al enviar. Inténtalo de nuevo o escríbenos por WhatsApp.");
                 });
             }}
             className="rounded-2xl border border-border bg-card p-6 shadow-soft md:p-8"
           >
+
             {/* Campo honeypot anti-spam (oculto) */}
             <p className="hidden">
               <label>
