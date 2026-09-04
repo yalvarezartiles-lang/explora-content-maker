@@ -20,7 +20,7 @@ import {
 } from "lucide-react";
 import { Link } from "@tanstack/react-router";
 import { toast } from "sonner";
-import { supabase } from "@/integrations/supabase/client";
+import { isGoogleFormConfigured, submitToGoogleForm } from "@/lib/google-form";
 import { Img, T, useSite, useText } from "@/lib/site-content";
 import heroImg from "@/assets/hero-adassa.jpg";
 import slideCoche from "@/assets/slide-coche.jpg";
