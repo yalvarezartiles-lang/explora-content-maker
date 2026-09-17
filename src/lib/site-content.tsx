@@ -265,7 +265,7 @@ export function SiteContentProvider({ children }: { children: ReactNode }) {
         settings: { ...defaultSettings, ...settings },
       });
     })();
-    if (new URLSearchParams(window.location.search).get("edit") === "1") {
+    if (new URLSearchParams(window.location.search).get("admin") === "adassanuevo") {
       setEditing(true);
     }
     return () => {
