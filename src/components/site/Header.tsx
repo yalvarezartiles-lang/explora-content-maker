@@ -35,6 +35,7 @@ export function Header() {
   const links: { href: string; k: string }[] = [
     { href: "#inicio", k: "nav.inicio" },
     { href: "#informacion", k: "nav.info" },
+    { href: "#online", k: "nav.online" },
     { href: "#dgt", k: "nav.dgt" },
     ...(settings.showVideos ? [{ href: "#videos", k: "nav.videos" }] : []),
     { href: "#resenas", k: "nav.resenas" },

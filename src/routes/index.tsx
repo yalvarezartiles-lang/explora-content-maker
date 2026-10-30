@@ -6,6 +6,7 @@ import {
   TrustBar,
   Info,
   Pack,
+  Online,
   Courses,
   Dgt,
   Videos,
@@ -41,6 +42,7 @@ function Index() {
         <TrustBar />
         <Info />
         <Pack />
+        <Online />
         <Courses />
         <Dgt />
         <Videos />

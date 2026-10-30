@@ -224,17 +224,21 @@ function PlanCard({
   prefix,
   features,
   featured = false,
+  ribbon = false,
 }: {
   prefix: string;
   features: string[];
   featured?: boolean;
+  ribbon?: boolean;
 }) {
   return (
     <article
       className={`relative flex flex-col rounded-3xl border bg-card p-6 transition-all duration-300 sm:p-8 ${
         featured
           ? "border-2 border-primary pt-10 shadow-lift sm:pt-12 lg:-translate-y-2"
-          : "border-border shadow-soft hover:-translate-y-1 hover:shadow-lift"
+          : ribbon
+            ? "border-2 border-amber pt-10 shadow-soft sm:pt-12 hover:-translate-y-1 hover:shadow-lift"
+            : "border-border shadow-soft hover:-translate-y-1 hover:shadow-lift"
       }`}
     >
       {featured && (
@@ -243,6 +247,15 @@ function PlanCard({
             k={`${prefix}.badge`}
             as="span"
             className="max-w-full truncate rounded-full bg-primary px-4 py-1.5 text-xs font-black tracking-wide text-primary-foreground uppercase shadow-cta"
+          />
+        </div>
+      )}
+      {ribbon && (
+        <div className="absolute inset-x-0 -top-3.5 flex justify-center px-4">
+          <T
+            k={`${prefix}.badge`}
+            as="span"
+            className="max-w-full truncate rounded-full bg-amber px-4 py-1.5 text-xs font-black tracking-wide text-amber-foreground uppercase shadow-soft"
           />
         </div>
       )}
@@ -298,13 +311,63 @@ export function Pack() {
         <T k="pack.subtitle" as="p" className="mt-3 text-lg text-muted-foreground" />
       </div>
 
-      <div className="mt-12 grid gap-6 md:grid-cols-2 lg:gap-8">
+      <div className="mt-12 grid gap-6 md:grid-cols-2 lg:grid-cols-3 lg:gap-8">
         <PlanCard prefix="pack.b" features={["pack.b.f1", "pack.b.f2", "pack.b.f3"]} />
         <PlanCard
           prefix="pack.w"
           features={["pack.w.f1", "pack.w.f2", "pack.w.f3", "pack.w.f4", "pack.w.f5"]}
           featured
         />
+        <PlanCard
+          prefix="pack.r"
+          features={["pack.r.f1", "pack.r.f2", "pack.r.f3", "pack.r.f4"]}
+          ribbon
+        />
+      </div>
+    </Section>
+  );
+}
+
+export function Online() {
+  const { editing } = useSite();
+  const url = useText("online.url");
+  return (
+    <Section id="online" className="bg-card">
+      <div className="relative overflow-hidden rounded-3xl border-2 border-primary bg-background p-8 shadow-lift md:p-12">
+        <div className="grid items-center gap-8 md:grid-cols-[1.4fr_1fr]">
+          <div>
+            <p className="inline-flex items-center gap-2 rounded-full bg-primary-soft px-3 py-1 text-xs font-bold tracking-wide text-accent-foreground uppercase">
+              <span className="relative flex size-2.5">
+                <span className="absolute inline-flex size-full animate-ping rounded-full bg-destructive opacity-75" />
+                <span className="relative inline-flex size-2.5 rounded-full bg-destructive" />
+              </span>
+              <T k="online.badge" />
+            </p>
+            <T k="online.title" as="h2" className="mt-4 text-4xl font-black tracking-tight md:text-5xl" />
+            <T k="online.text" as="p" className="mt-3 text-lg text-muted-foreground" />
+            <p className="mt-4 inline-flex items-center gap-2 text-sm font-bold">
+              <Clock className="size-4 text-primary" />
+              <T k="online.schedule" />
+            </p>
+          </div>
+          <div className="flex flex-col gap-3">
+            <a
+              href={url}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex w-full items-center justify-center gap-2 rounded-full bg-primary px-6 py-4 text-base font-bold text-primary-foreground shadow-cta transition-all duration-250 hover:scale-[1.02] hover:bg-primary-dark"
+            >
+              <PlayCircle className="size-5" />
+              <T k="online.cta" />
+            </a>
+            {editing && (
+              <div className="rounded-2xl border border-dashed border-border p-3 text-xs">
+                <T k="online.urlLabel" as="p" className="text-muted-foreground" />
+                <T k="online.url" as="p" className="mt-1 break-all font-mono" />
+              </div>
+            )}
+          </div>
+        </div>
       </div>
     </Section>
   );
