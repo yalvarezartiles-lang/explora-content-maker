@@ -23,6 +23,7 @@ import { toast } from "sonner";
 import { isGoogleFormConfigured, submitToGoogleForm } from "@/lib/google-form";
 import { Img, T, useSite, useText } from "@/lib/site-content";
 import { fetchActiveHeroUrl } from "@/lib/hero-banner";
+import { listCarouselImages, type CarouselImage } from "@/lib/carousel-mock";
 import heroImg from "@/assets/hero-adassa.jpg";
 import slideCoche from "@/assets/slide-coche.jpg";
 import slideOferta from "@/assets/slide-oferta.jpg";
@@ -34,6 +35,41 @@ const heroSlides = [
 ];
 
 function HeroCarousel() {
+  const [custom, setCustom] = useState<CarouselImage[] | null>(null);
+  useEffect(() => {
+    listCarouselImages().then(setCustom).catch(() => setCustom([]));
+  }, []);
+  if (custom === null) return <div className="aspect-[4/3.2] w-full animate-pulse rounded-3xl bg-muted shadow-lift" />;
+  if (custom.length) return <CustomCarousel items={custom} />;
+  return <DefaultCarousel />;
+}
+
+function CustomCarousel({ items }: { items: CarouselImage[] }) {
+  const [i, setI] = useState(0);
+  useEffect(() => {
+    const id = setInterval(() => setI((v) => (v + 1) % items.length), 5000);
+    return () => clearInterval(id);
+  }, [items.length]);
+  return (
+    <div className="relative aspect-[4/3.2] w-full overflow-hidden rounded-3xl bg-muted shadow-lift">
+      {items.map((it, idx) => (
+        <img key={it.id} src={it.image_url} alt={`Autoescuela Adassa, imagen ${idx + 1}`} width={1408} height={1104}
+          loading={idx === 0 ? "eager" : "lazy"}
+          className={`absolute inset-0 size-full object-cover transition-opacity duration-700 ${idx === i ? "opacity-100" : "opacity-0"}`} />
+      ))}
+      {items.length > 1 && (
+        <div className="absolute top-4 right-4 z-10 flex gap-1.5">
+          {items.map((it, idx) => (
+            <button key={it.id} aria-label={`Ver imagen ${idx + 1}`} onClick={() => setI(idx)}
+              className={`h-2 rounded-full transition-all duration-300 ${idx === i ? "w-6 bg-primary" : "w-2 bg-card/70"}`} />
+          ))}
+        </div>
+      )}
+    </div>
+  );
+}
+
+function DefaultCarousel() {
   const [i, setI] = useState(0);
   // undefined = cargando, null = sin imagen publicitaria activa
   const [promo, setPromo] = useState<string | null | undefined>(undefined);
