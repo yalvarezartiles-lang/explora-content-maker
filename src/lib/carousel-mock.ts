@@ -2,7 +2,14 @@
 // Cada función imita la llamada equivalente de Supabase; sustituir el cuerpo al conectar.
 export type CarouselImage = { id: string; image_url: string; order_index: number };
 
-let rows: CarouselImage[] = [];
+import hero from "@/assets/hero-adassa.jpg";
+import oferta from "@/assets/slide-oferta.jpg";
+import coche from "@/assets/slide-coche.jpg";
+
+// Estado inicial simulado: 3 imágenes de prueba.
+let rows: CarouselImage[] = [hero, coche, oferta].map((image_url, order_index) => ({
+  id: `demo-${order_index}`, image_url, order_index,
+}));
 const delay = () => new Promise((r) => setTimeout(r, 150));
 const sorted = () => [...rows].sort((a, b) => a.order_index - b.order_index);
 
@@ -20,6 +27,17 @@ export async function insertCarouselImages(files: File[]): Promise<CarouselImage
     ...rows,
     ...files.map((f, i) => ({ id: crypto.randomUUID(), image_url: URL.createObjectURL(f), order_index: start + i })),
   ];
+  return sorted();
+}
+
+/** Sustituye la imagen de un hueco manteniendo su posición (UPDATE image_url). */
+export async function replaceCarouselImage(id: string, file: File): Promise<CarouselImage[]> {
+  await delay();
+  rows = rows.map((r) => {
+    if (r.id !== id) return r;
+    if (r.image_url.startsWith("blob:")) URL.revokeObjectURL(r.image_url);
+    return { ...r, image_url: URL.createObjectURL(file) };
+  });
   return sorted();
 }
 
