@@ -2,6 +2,9 @@ import { useEffect, useState } from "react";
 import { Link } from "@tanstack/react-router";
 import { Menu, X, Phone } from "lucide-react";
 import { T, useSite, useText } from "@/lib/site-content";
+import { Button } from '@/components/ui/button';
+import { UserRound } from 'lucide-react';
+import { usePortalSession } from '@/lib/portal/session';
 
 function Brandmark() {
   return (
@@ -20,6 +23,7 @@ export function Header() {
   const [open, setOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const phone = useText("info.phone");
+  const user = usePortalSession();
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 12);
@@ -66,6 +70,9 @@ export function Header() {
         </nav>
 
         <div className="flex items-center gap-2">
+          <Button asChild variant="ghost" size="icon" title={user ? 'Mi cuenta' : 'Acceso alumnos'}>
+            <Link to={user ? '/alumnos/tienda' : '/auth'} aria-label={user ? 'Mi cuenta' : 'Acceso alumnos'}><UserRound /></Link>
+          </Button>
           <a
             href={`tel:${phone.replace(/\s/g, "")}`}
             className="hidden items-center gap-2 rounded-full border border-border px-3.5 py-2 text-sm font-semibold transition-colors hover:border-primary hover:text-primary-dark md:inline-flex"
