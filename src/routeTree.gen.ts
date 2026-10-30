@@ -10,42 +10,134 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/route'
+import { Route as AuthRouteImport } from './routes/auth'
+import { Route as ResetPasswordRouteImport } from './routes/reset-password'
+import { Route as AuthenticatedAlumnosRouteImport } from './routes/_authenticated/alumnos'
 import { Route as LegalDocRouteImport } from './routes/legal.$doc'
+import { Route as AuthenticatedAlumnosHistorialRouteImport } from './routes/_authenticated/alumnos.historial'
+import { Route as AuthenticatedAlumnosPerfilRouteImport } from './routes/_authenticated/alumnos.perfil'
+import { Route as AuthenticatedAlumnosTiendaRouteImport } from './routes/_authenticated/alumnos.tienda'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AuthenticatedRouteRoute = AuthenticatedRouteRouteImport.update({
+  id: '/_authenticated',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AuthRoute = AuthRouteImport.update({
+  id: '/auth',
+  path: '/auth',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ResetPasswordRoute = ResetPasswordRouteImport.update({
+  id: '/reset-password',
+  path: '/reset-password',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AuthenticatedAlumnosRoute = AuthenticatedAlumnosRouteImport.update({
+  id: '/alumnos',
+  path: '/alumnos',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
 const LegalDocRoute = LegalDocRouteImport.update({
   id: '/legal/$doc',
   path: '/legal/$doc',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AuthenticatedAlumnosHistorialRoute =
+  AuthenticatedAlumnosHistorialRouteImport.update({
+    id: '/historial',
+    path: '/historial',
+    getParentRoute: () => AuthenticatedAlumnosRoute,
+  } as any)
+const AuthenticatedAlumnosPerfilRoute =
+  AuthenticatedAlumnosPerfilRouteImport.update({
+    id: '/perfil',
+    path: '/perfil',
+    getParentRoute: () => AuthenticatedAlumnosRoute,
+  } as any)
+const AuthenticatedAlumnosTiendaRoute =
+  AuthenticatedAlumnosTiendaRouteImport.update({
+    id: '/tienda',
+    path: '/tienda',
+    getParentRoute: () => AuthenticatedAlumnosRoute,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/auth': typeof AuthRoute
+  '/reset-password': typeof ResetPasswordRoute
+  '/alumnos': typeof AuthenticatedAlumnosRouteWithChildren
   '/legal/$doc': typeof LegalDocRoute
+  '/alumnos/historial': typeof AuthenticatedAlumnosHistorialRoute
+  '/alumnos/perfil': typeof AuthenticatedAlumnosPerfilRoute
+  '/alumnos/tienda': typeof AuthenticatedAlumnosTiendaRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/auth': typeof AuthRoute
+  '/reset-password': typeof ResetPasswordRoute
+  '/alumnos': typeof AuthenticatedAlumnosRouteWithChildren
   '/legal/$doc': typeof LegalDocRoute
+  '/alumnos/historial': typeof AuthenticatedAlumnosHistorialRoute
+  '/alumnos/perfil': typeof AuthenticatedAlumnosPerfilRoute
+  '/alumnos/tienda': typeof AuthenticatedAlumnosTiendaRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/_authenticated': typeof AuthenticatedRouteRouteWithChildren
+  '/auth': typeof AuthRoute
+  '/reset-password': typeof ResetPasswordRoute
+  '/_authenticated/alumnos': typeof AuthenticatedAlumnosRouteWithChildren
   '/legal/$doc': typeof LegalDocRoute
+  '/_authenticated/alumnos/historial': typeof AuthenticatedAlumnosHistorialRoute
+  '/_authenticated/alumnos/perfil': typeof AuthenticatedAlumnosPerfilRoute
+  '/_authenticated/alumnos/tienda': typeof AuthenticatedAlumnosTiendaRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/legal/$doc'
+  fullPaths:
+    | '/'
+    | '/auth'
+    | '/reset-password'
+    | '/alumnos'
+    | '/legal/$doc'
+    | '/alumnos/historial'
+    | '/alumnos/perfil'
+    | '/alumnos/tienda'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/legal/$doc'
-  id: '__root__' | '/' | '/legal/$doc'
+  to:
+    | '/'
+    | '/auth'
+    | '/reset-password'
+    | '/alumnos'
+    | '/legal/$doc'
+    | '/alumnos/historial'
+    | '/alumnos/perfil'
+    | '/alumnos/tienda'
+  id:
+    | '__root__'
+    | '/'
+    | '/_authenticated'
+    | '/auth'
+    | '/reset-password'
+    | '/_authenticated/alumnos'
+    | '/legal/$doc'
+    | '/_authenticated/alumnos/historial'
+    | '/_authenticated/alumnos/perfil'
+    | '/_authenticated/alumnos/tienda'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AuthenticatedRouteRoute: typeof AuthenticatedRouteRouteWithChildren
+  AuthRoute: typeof AuthRoute
+  ResetPasswordRoute: typeof ResetPasswordRoute
   LegalDocRoute: typeof LegalDocRoute
 }
 
@@ -58,6 +150,34 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/_authenticated': {
+      id: '/_authenticated'
+      path: ''
+      fullPath: '/'
+      preLoaderRoute: typeof AuthenticatedRouteRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/auth': {
+      id: '/auth'
+      path: '/auth'
+      fullPath: '/auth'
+      preLoaderRoute: typeof AuthRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/reset-password': {
+      id: '/reset-password'
+      path: '/reset-password'
+      fullPath: '/reset-password'
+      preLoaderRoute: typeof ResetPasswordRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/_authenticated/alumnos': {
+      id: '/_authenticated/alumnos'
+      path: '/alumnos'
+      fullPath: '/alumnos'
+      preLoaderRoute: typeof AuthenticatedAlumnosRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/legal/$doc': {
       id: '/legal/$doc'
       path: '/legal/$doc'
@@ -65,11 +185,61 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LegalDocRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/_authenticated/alumnos/historial': {
+      id: '/_authenticated/alumnos/historial'
+      path: '/historial'
+      fullPath: '/alumnos/historial'
+      preLoaderRoute: typeof AuthenticatedAlumnosHistorialRouteImport
+      parentRoute: typeof AuthenticatedAlumnosRoute
+    }
+    '/_authenticated/alumnos/perfil': {
+      id: '/_authenticated/alumnos/perfil'
+      path: '/perfil'
+      fullPath: '/alumnos/perfil'
+      preLoaderRoute: typeof AuthenticatedAlumnosPerfilRouteImport
+      parentRoute: typeof AuthenticatedAlumnosRoute
+    }
+    '/_authenticated/alumnos/tienda': {
+      id: '/_authenticated/alumnos/tienda'
+      path: '/tienda'
+      fullPath: '/alumnos/tienda'
+      preLoaderRoute: typeof AuthenticatedAlumnosTiendaRouteImport
+      parentRoute: typeof AuthenticatedAlumnosRoute
+    }
   }
 }
 
+interface AuthenticatedAlumnosRouteChildren {
+  AuthenticatedAlumnosHistorialRoute: typeof AuthenticatedAlumnosHistorialRoute
+  AuthenticatedAlumnosPerfilRoute: typeof AuthenticatedAlumnosPerfilRoute
+  AuthenticatedAlumnosTiendaRoute: typeof AuthenticatedAlumnosTiendaRoute
+}
+
+const AuthenticatedAlumnosRouteChildren: AuthenticatedAlumnosRouteChildren = {
+  AuthenticatedAlumnosHistorialRoute: AuthenticatedAlumnosHistorialRoute,
+  AuthenticatedAlumnosPerfilRoute: AuthenticatedAlumnosPerfilRoute,
+  AuthenticatedAlumnosTiendaRoute: AuthenticatedAlumnosTiendaRoute,
+}
+
+const AuthenticatedAlumnosRouteWithChildren =
+  AuthenticatedAlumnosRoute._addFileChildren(AuthenticatedAlumnosRouteChildren)
+
+interface AuthenticatedRouteRouteChildren {
+  AuthenticatedAlumnosRoute: typeof AuthenticatedAlumnosRouteWithChildren
+}
+
+const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
+  AuthenticatedAlumnosRoute: AuthenticatedAlumnosRouteWithChildren,
+}
+
+const AuthenticatedRouteRouteWithChildren =
+  AuthenticatedRouteRoute._addFileChildren(AuthenticatedRouteRouteChildren)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AuthenticatedRouteRoute: AuthenticatedRouteRouteWithChildren,
+  AuthRoute: AuthRoute,
+  ResetPasswordRoute: ResetPasswordRoute,
   LegalDocRoute: LegalDocRoute,
 }
 export const routeTree = rootRouteImport

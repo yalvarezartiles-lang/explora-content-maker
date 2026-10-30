@@ -41,6 +41,149 @@ export type Database = {
         }
         Relationships: []
       }
+      dni_login_limits: {
+        Row: {
+          attempts: number
+          key: string
+          window_start: string
+        }
+        Insert: {
+          attempts?: number
+          key: string
+          window_start?: string
+        }
+        Update: {
+          attempts?: number
+          key?: string
+          window_start?: string
+        }
+        Relationships: []
+      }
+      order_items: {
+        Row: {
+          id: string
+          order_id: string
+          product_id: string
+          product_name: string
+          quantity: number
+          unit_price_cents: number
+        }
+        Insert: {
+          id?: string
+          order_id: string
+          product_id: string
+          product_name: string
+          quantity: number
+          unit_price_cents: number
+        }
+        Update: {
+          id?: string
+          order_id?: string
+          product_id?: string
+          product_name?: string
+          quantity?: number
+          unit_price_cents?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "order_items_order_id_fkey"
+            columns: ["order_id"]
+            isOneToOne: false
+            referencedRelation: "orders"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "order_items_product_id_fkey"
+            columns: ["product_id"]
+            isOneToOne: false
+            referencedRelation: "products"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      orders: {
+        Row: {
+          created_at: string
+          id: string
+          provider: string
+          provider_reference: string | null
+          status: string
+          student_id: string
+          total_cents: number
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          provider: string
+          provider_reference?: string | null
+          status?: string
+          student_id: string
+          total_cents: number
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          provider?: string
+          provider_reference?: string | null
+          status?: string
+          student_id?: string
+          total_cents?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "orders_student_id_fkey"
+            columns: ["student_id"]
+            isOneToOne: false
+            referencedRelation: "students"
+            referencedColumns: ["user_id"]
+          },
+        ]
+      }
+      products: {
+        Row: {
+          active: boolean
+          category: string
+          created_at: string
+          description: string
+          id: string
+          name: string
+          price_cents: number | null
+        }
+        Insert: {
+          active?: boolean
+          category: string
+          created_at?: string
+          description?: string
+          id?: string
+          name: string
+          price_cents?: number | null
+        }
+        Update: {
+          active?: boolean
+          category?: string
+          created_at?: string
+          description?: string
+          id?: string
+          name?: string
+          price_cents?: number | null
+        }
+        Relationships: []
+      }
+      profiles: {
+        Row: {
+          full_name: string
+          id: string
+        }
+        Insert: {
+          full_name?: string
+          id: string
+        }
+        Update: {
+          full_name?: string
+          id?: string
+        }
+        Relationships: []
+      }
       site_content: {
         Row: {
           key: string
@@ -59,12 +202,59 @@ export type Database = {
         }
         Relationships: []
       }
+      students: {
+        Row: {
+          created_at: string
+          dni: string
+          email: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          dni: string
+          email: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          dni?: string
+          email?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "students_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: true
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      user_roles: {
+        Row: {
+          role: string
+          user_id: string
+        }
+        Insert: {
+          role: string
+          user_id: string
+        }
+        Update: {
+          role?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      consume_dni_login_attempt: {
+        Args: { attempt_key: string }
+        Returns: boolean
+      }
     }
     Enums: {
       [_ in never]: never
