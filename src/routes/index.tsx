@@ -1,3 +1,4 @@
+import { GoogleReviews } from "@/components/site/GoogleReviews";
 import { createFileRoute } from "@tanstack/react-router";
 import { Header } from "@/components/site/Header";
 import { Footer, WhatsAppFab, CookieBanner } from "@/components/site/Chrome";
@@ -10,7 +11,7 @@ import {
   Courses,
   Dgt,
   Videos,
-  Reviews,
+
   Locations,
   Contact,
 } from "@/components/site/Sections";
@@ -46,7 +47,7 @@ function Index() {
         <Courses />
         <Dgt />
         <Videos />
-        <Reviews />
+        <GoogleReviews />
         <Locations />
         <Contact />
       </main>
