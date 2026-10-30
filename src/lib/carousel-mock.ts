@@ -1,60 +1,67 @@
-// Lógica simulada para la futura tabla `carousel_images` (id, image_url, order_index).
-// Cada función imita la llamada equivalente de Supabase; sustituir el cuerpo al conectar.
+// Carrusel del Hero: tabla `carousel_images` (image_url guarda la ruta en el bucket web-assets).
+import { supabase } from "@/integrations/supabase/client";
+
 export type CarouselImage = { id: string; image_url: string; order_index: number };
+const BUCKET = "web-assets";
 
-import hero from "@/assets/hero-adassa.jpg";
-import oferta from "@/assets/slide-oferta.jpg";
-import coche from "@/assets/slide-coche.jpg";
+async function withUrls(rows: { id: string; image_url: string; order_index: number }[]) {
+  if (!rows.length) return [];
+  const { data } = await supabase.storage.from(BUCKET).createSignedUrls(rows.map((r) => r.image_url), 60 * 60 * 24 * 7);
+  return rows.map((r, i) => ({ ...r, image_url: data?.[i]?.signedUrl ?? "" }));
+}
 
-// Estado inicial simulado: 3 imágenes de prueba.
-let rows: CarouselImage[] = [hero, coche, oferta].map((image_url, order_index) => ({
-  id: `demo-${order_index}`, image_url, order_index,
-}));
-const delay = () => new Promise((r) => setTimeout(r, 150));
-const sorted = () => [...rows].sort((a, b) => a.order_index - b.order_index);
+async function raw() {
+  const { data, error } = await supabase.from("carousel_images").select("id, image_url, order_index").order("order_index");
+  if (error) throw new Error("No se pudieron cargar las imágenes.");
+  return data ?? [];
+}
 
-/** SELECT * FROM carousel_images ORDER BY order_index */
 export async function listCarouselImages(): Promise<CarouselImage[]> {
-  await delay();
-  return sorted();
+  return withUrls(await raw());
 }
 
-/** Subida al bucket + INSERT. En el mock la URL es local (object URL). */
+async function upload(file: File) {
+  const ext = file.name.split(".").pop()?.toLowerCase() || "jpg";
+  const path = `carousel/${crypto.randomUUID()}.${ext}`;
+  const { error } = await supabase.storage.from(BUCKET).upload(path, file, { contentType: file.type });
+  if (error) throw new Error("No se pudo subir la imagen.");
+  return path;
+}
+
 export async function insertCarouselImages(files: File[]): Promise<CarouselImage[]> {
-  await delay();
-  const start = rows.length ? Math.max(...rows.map((r) => r.order_index)) + 1 : 0;
-  rows = [
-    ...rows,
-    ...files.map((f, i) => ({ id: crypto.randomUUID(), image_url: URL.createObjectURL(f), order_index: start + i })),
-  ];
-  return sorted();
+  const rows = await raw();
+  let next = rows.length ? Math.max(...rows.map((r) => r.order_index)) + 1 : 0;
+  for (const f of files) {
+    const path = await upload(f);
+    const { error } = await supabase.from("carousel_images").insert({ image_url: path, order_index: next++ });
+    if (error) throw new Error("No se pudo guardar la imagen.");
+  }
+  return listCarouselImages();
 }
 
-/** Sustituye la imagen de un hueco manteniendo su posición (UPDATE image_url). */
 export async function replaceCarouselImage(id: string, file: File): Promise<CarouselImage[]> {
-  await delay();
-  rows = rows.map((r) => {
-    if (r.id !== id) return r;
-    if (r.image_url.startsWith("blob:")) URL.revokeObjectURL(r.image_url);
-    return { ...r, image_url: URL.createObjectURL(file) };
-  });
-  return sorted();
+  const old = (await raw()).find((r) => r.id === id);
+  const path = await upload(file);
+  const { error } = await supabase.from("carousel_images").update({ image_url: path }).eq("id", id);
+  if (error) throw new Error("No se pudo sustituir la imagen.");
+  if (old) await supabase.storage.from(BUCKET).remove([old.image_url]);
+  return listCarouselImages();
 }
 
-/** UPDATE order_index de cada fila según el nuevo orden. */
 export async function reorderCarouselImages(ids: string[]): Promise<CarouselImage[]> {
-  await delay();
-  rows = rows.map((r) => ({ ...r, order_index: ids.indexOf(r.id) }));
-  return sorted();
+  for (const [i, id] of ids.entries()) {
+    const { error } = await supabase.from("carousel_images").update({ order_index: i }).eq("id", id);
+    if (error) throw new Error("No se pudo reordenar.");
+  }
+  return listCarouselImages();
 }
 
-/** DELETE FROM carousel_images WHERE id = ? (y borrado del archivo). */
 export async function deleteCarouselImage(id: string): Promise<CarouselImage[]> {
-  await delay();
-  const row = rows.find((r) => r.id === id);
-  if (row?.image_url.startsWith("blob:")) URL.revokeObjectURL(row.image_url);
-  rows = rows.filter((r) => r.id !== id).map((r, i) => ({ ...r, order_index: i }));
-  return sorted();
+  const old = (await raw()).find((r) => r.id === id);
+  const { error } = await supabase.from("carousel_images").delete().eq("id", id);
+  if (error) throw new Error("No se pudo eliminar la imagen.");
+  if (old) await supabase.storage.from(BUCKET).remove([old.image_url]);
+  return listCarouselImages();
 }
 
 /** Mueve un elemento una posición y devuelve el nuevo orden de IDs. */
