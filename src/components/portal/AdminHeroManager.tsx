@@ -43,7 +43,7 @@ export function AdminHeroManager() {
   return (
     <section className="mt-12 border-t pt-8">
       <h2 className="mb-2 flex items-center gap-2 text-xl font-bold"><ImageUp />Gestor de carrusel</h2>
-      <p className="mb-5 text-sm text-muted-foreground">Pulsa una foto para sustituirla, la X para quitarla o el + para añadir otra al final. (Modo de prueba.)</p>
+      <p className="mb-5 text-sm text-muted-foreground">Pulsa una foto para sustituirla, la X para quitarla o el + para añadir otra al final. Los cambios se ven al momento en la portada. Si no hay ninguna, la portada muestra las fotos por defecto.</p>
 
       <div className="flex flex-row gap-3 overflow-x-auto pb-3 pt-2">
         {items.map((img, i) => (
