@@ -4,9 +4,10 @@ export type CarouselImage = { id: string; image_url: string; order_index: number
 
 import hero from "@/assets/hero-adassa.jpg";
 import oferta from "@/assets/slide-oferta.jpg";
+import coche from "@/assets/slide-coche.jpg";
 
 // Estado inicial simulado: 3 imágenes de prueba.
-let rows: CarouselImage[] = [hero, oferta, hero].map((image_url, order_index) => ({
+let rows: CarouselImage[] = [hero, coche, oferta].map((image_url, order_index) => ({
   id: `demo-${order_index}`, image_url, order_index,
 }));
 const delay = () => new Promise((r) => setTimeout(r, 150));
