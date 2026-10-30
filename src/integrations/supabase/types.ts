@@ -59,6 +59,27 @@ export type Database = {
         }
         Relationships: []
       }
+      hero_banners: {
+        Row: {
+          active: boolean
+          created_at: string
+          id: string
+          storage_path: string
+        }
+        Insert: {
+          active?: boolean
+          created_at?: string
+          id?: string
+          storage_path: string
+        }
+        Update: {
+          active?: boolean
+          created_at?: string
+          id?: string
+          storage_path?: string
+        }
+        Relationships: []
+      }
       order_items: {
         Row: {
           id: string
@@ -255,6 +276,7 @@ export type Database = {
         Args: { attempt_key: string }
         Returns: boolean
       }
+      has_role: { Args: { _role: string; _user_id: string }; Returns: boolean }
     }
     Enums: {
       [_ in never]: never

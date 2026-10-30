@@ -22,6 +22,7 @@ import { Link } from "@tanstack/react-router";
 import { toast } from "sonner";
 import { isGoogleFormConfigured, submitToGoogleForm } from "@/lib/google-form";
 import { Img, T, useSite, useText } from "@/lib/site-content";
+import { fetchActiveHeroUrl } from "@/lib/hero-banner";
 import heroImg from "@/assets/hero-adassa.jpg";
 import slideCoche from "@/assets/slide-coche.jpg";
 import slideOferta from "@/assets/slide-oferta.jpg";
@@ -34,6 +35,17 @@ const heroSlides = [
 
 function HeroCarousel() {
   const [i, setI] = useState(0);
+  // undefined = cargando, null = sin imagen publicitaria activa
+  const [promo, setPromo] = useState<string | null | undefined>(undefined);
+  const [promoLoaded, setPromoLoaded] = useState(false);
+
+  useEffect(() => {
+    let alive = true;
+    fetchActiveHeroUrl()
+      .then((u) => alive && setPromo(u))
+      .catch(() => alive && setPromo(null));
+    return () => { alive = false; };
+  }, []);
 
   useEffect(() => {
     const id = setInterval(() => setI((v) => (v + 1) % heroSlides.length), 5000);
@@ -41,7 +53,7 @@ function HeroCarousel() {
   }, []);
 
   return (
-    <div className="relative aspect-[4/3.2] w-full overflow-hidden rounded-3xl shadow-lift">
+    <div className="relative aspect-[4/3.2] w-full overflow-hidden rounded-3xl bg-muted shadow-lift">
       {heroSlides.map((s, idx) => (
         <div
           key={s.k}
@@ -49,6 +61,22 @@ function HeroCarousel() {
             idx === i ? "opacity-100" : "opacity-0"
           }`}
         >
+          {idx === 0 && promo !== null ? (
+            <>
+              {!promoLoaded && <div aria-hidden className="absolute inset-0 animate-pulse bg-muted" />}
+              {promo && (
+                <img
+                  src={promo}
+                  alt="Oferta destacada de Autoescuela Adassa"
+                  width={1408}
+                  height={1104}
+                  onLoad={() => setPromoLoaded(true)}
+                  onError={() => setPromo(null)}
+                  className={`size-full object-cover transition-opacity duration-700 ${promoLoaded ? "opacity-100" : "opacity-0"}`}
+                />
+              )}
+            </>
+          ) : (
           <Img
             k={`hero.slide.${s.k}.img`}
             fallback={s.img}
@@ -58,6 +86,7 @@ function HeroCarousel() {
             loading={idx === 0 ? "eager" : "lazy"}
             className="size-full object-cover"
           />
+          )}
           <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-graphite/85 to-transparent p-5 pb-10 text-left">
             <T
               k={`hero.slide.${s.k}.title`}
