@@ -15,7 +15,7 @@ export function AdminHeroManager() {
   async function handle(file: File | undefined) {
     if (!file) return;
     const err = validateHeroFile(file);
-    if (err) return toast.error(err);
+    if (err) { toast.error(err); return; }
     setBusy(true);
     try { setUrl(await uploadHeroImage(file)); toast.success("Imagen publicada en la portada."); }
     catch (e) { toast.error(e instanceof Error ? e.message : "Error al subir."); }
