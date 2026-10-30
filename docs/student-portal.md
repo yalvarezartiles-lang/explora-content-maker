@@ -36,3 +36,8 @@ Esta aplicación mantiene TanStack Start, no se sustituye por Vercel/Nitro. Al c
 5. La página de retorno no confirma pagos; hacerlo solo con el callback verificado.
 
 No se ha comprobado un despliegue externo de Vercel.
+
+## Imagen publicitaria del Hero
+- `hero_banners` (id, storage_path, active, created_at): lectura pública solo de la activa; alta/edición solo administradores vía `has_role(auth.uid(),'admin')`.
+- Bucket `web-assets` (privado por política del espacio de trabajo, lectura pública por RLS y URL firmada; escritura solo admin).
+- El rol de administrador vive en `user_roles` (equivale a `is_admin`), nunca en `profiles`, para evitar escaladas de privilegios.
