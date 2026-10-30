@@ -251,7 +251,9 @@ type Ctx = {
   exportJson: () => string;
 };
 
-const SiteContext = createContext<Ctx | null>(null);
+// Keep a single context instance across hot reloads so provider and consumers always match.
+const globalStore = globalThis as unknown as { __adassaSiteContext?: React.Context<Ctx | null> };
+const SiteContext = (globalStore.__adassaSiteContext ??= createContext<Ctx | null>(null));
 
 const SETTING_PREFIX = "__setting.";
 
